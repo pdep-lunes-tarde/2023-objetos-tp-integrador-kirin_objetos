@@ -1,6 +1,7 @@
 # Grupo
 
-Nombre: **COMPLETAR ACA**
+Nombre: Kirin_Logico
+Juego: 2048
 
 Integrantes: **COMPLETAR ACA**
 
