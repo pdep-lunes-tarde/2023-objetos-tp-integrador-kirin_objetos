@@ -1,6 +1,6 @@
 # Grupo
 
-Nombre: Kirin_Logico
+Nombre: Kirin_Objetos
 Juego: 2048
 
 Integrantes: **COMPLETAR ACA**
