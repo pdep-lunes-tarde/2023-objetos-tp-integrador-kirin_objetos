@@ -30,7 +30,7 @@ object juego {
 		game.boardGround("fondo.png")
 		
 		game.addVisualCharacter(new Numero(numero=2,ejeX=self.randomX(),ejeY=self.randomY()))
-		game.addVisualCharacter(new Numero(numero=4,ejeX=self.randomX(),ejeY=self.randomY()))
+		game.addVisualCharacter(new Numero(numero=2,ejeX=self.randomX(),ejeY=self.randomY()))
 		
 		game.start()
 	}
