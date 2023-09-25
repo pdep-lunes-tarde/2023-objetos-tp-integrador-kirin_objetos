@@ -3,7 +3,11 @@
 Nombre: Kirin_Objetos
 Juego: 2048
 
-Integrantes: **COMPLETAR ACA**
+Integrantes: 
+
+	- Francisco Ou Su
+	- Zoe Yusti
+	- Kenzo Grosvald
 
 # Consigna TP Integrador
 
