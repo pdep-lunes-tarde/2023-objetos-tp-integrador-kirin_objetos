@@ -32,7 +32,13 @@ Les vamos a ir dando preguntas para cada checkpoint que **tienen que** dejar con
 
 a) Detectar un conjunto de objetos que sean polimórficos entre sí, aclarando cuál es la interfaz según la cuál son polimórficos, y _quién_ los trata de manera polimórfica.
 
+El conjunto de objetos que son polimorficos entre si en este caso serían los numeros, quien los trata de manera polimorfica tendría que ser el handler del juego, que sería en este caso el objeto de juego que maneja la ejecución del programa.
+
 b) Tomar alguna clase definida en su programa y justificar por qué es una clase y no se definió con `object`.
 
+La clase definida de Numero fue definida como tal ya que es un molde que se usa para instanciar nuevos numeros que se generan en tiempo de ejecución y comparten la misma inerfaz, cada numero tiene atributos distintos en cuanto a sus coordenadas por lo tanto no podría estar definido como un objeto ya que su estado interno no podría ser compartido. Se requieren de muchos numeros en simultaneo que van a ser repetidos y cada uno se encuentra en una coordenada distinta, habiendo sido instanciado bajo un numero distinto.
+
 c) De haber algún objeto definido con `object`, justificar por qué.
+
+El handler del juego es un objeto, ya que su tarea es mantener (a futuro supongo) un estado interno de todas las coordenadas ocupadas en algun lado (Diccionario, Lista, etc) y poder ser consultable por objetos externos al momento de verificar si la coordenada se encuentra ocupada y por quien, para poder tomar decisiones acorde. Sirve a modo de una base de datos de lo que está pasando en el programa en tiempo de ejecución.
 
