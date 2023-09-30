@@ -25,11 +25,11 @@ object juego {
 	var pepita
 				
 	method iniciar() {
-		game.width(4)
-		game.height(4)
+		game.width(6)
+		game.height(7)
 		game.cellSize(100)
 		game.title("2048")
-		game.boardGround("fondo.png")
+		game.boardGround("background.gif")
 
 		
 		self.agregarNumero(2) 
