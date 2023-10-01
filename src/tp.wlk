@@ -5,17 +5,17 @@ class Numero {
 	const numero
 	var property position
 	
-	method arriba() {
- 		position = position.up(1)
+	method arriba(casilleros) {
+ 		position = position.up(casilleros)
  	}
-  	method abajo() {
- 		position = position.down(1)
+  	method abajo(casilleros) {
+ 		position = position.down(casilleros)
  	}
-  	method izquierda() {
-    	position = position.left(1) 
+  	method izquierda(casilleros) {
+    	position = position.left(casilleros) 
   	}
-  	method derecha() {
-    	position = position.right(1)
+  	method derecha(casilleros) {
+    	position = position.right(casilleros)
   	}
 
 	method image() = "assets/" + numero + ".png"
@@ -34,10 +34,10 @@ object juego {
 		
 		self.agregarNumero(2) 
 		
-		keyboard.up().onPressDo{pepita.arriba()}
-		keyboard.down().onPressDo{pepita.abajo()}
-		keyboard.left().onPressDo{pepita.izquierda()}
-		keyboard.right().onPressDo{pepita.derecha()}
+		keyboard.up().onPressDo{self.moverArriba()}
+		keyboard.down().onPressDo{self.moverAbajo()}
+		keyboard.left().onPressDo{self.moverIzquierda()}
+		keyboard.right().onPressDo{self.moverDerecha()}
 		game.start()
 	}
 	
@@ -55,6 +55,54 @@ object juego {
 
 	method pepita(){
 		return pepita.position()
+	}
+	
+	method positionX(){
+		return pepita.position().x()
+	}
+	
+	method positionY(){
+		return pepita.position().y()
+	}
+	
+	method moverDerecha(){
+		const x = self.positionX()
+		const casilleros = 4 - x
+		if(x < 4){
+			pepita.derecha(casilleros)
+		} else {
+			console.println("limite")
+		}
+	}
+	
+	method moverIzquierda(){
+		const x = self.positionX()
+		const casilleros = x - 1
+		if(x > 1){
+			pepita.izquierda(casilleros)
+		} else {
+			console.println("limite")
+		}
+	}
+	
+	method moverArriba(){
+		const y = self.positionY()
+		const casilleros = 4 - y
+		if(y < 4){
+			pepita.arriba(casilleros)
+		} else {
+			console.println("limite")
+		}
+	}
+	
+	method moverAbajo(){
+		const y = self.positionY()
+		const casilleros = y - 1
+		if(y > 1){
+			pepita.abajo(casilleros)
+		} else {
+			console.println("limite")
+		}
 	}
 	
 		
