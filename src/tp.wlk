@@ -69,9 +69,13 @@ object juego {
 					keyboard.right().onPressDo{
 						self.moverDerecha(num)
 					}
+					// game.onCollideDo(num, { element => }) Uso onCollide o whenCollide?
 				})
 
+		// game.whenKeyPressedDo(up, self.agregarNumero()) Esto es mejor para añadir nuevos numeros?
+		
 
+		
 		game.start()
 	}
 	
@@ -108,6 +112,7 @@ object juego {
 		const x = numero.positionX()
 		const casilleros = 4 - x
 		numero.movimientosFaltantes(casilleros)
+		
 		if(x < 4){
 			if(!self.estaOcupado(numero.positionX()+1,numero.positionY())){
 				if(numero.movimientosFaltantes()>0){
@@ -115,9 +120,11 @@ object juego {
 					numero.movimientosFaltantes(-1)
 					self.moverDerecha(numero)
 				}
+			} else {
+				//aca debo sumar los numeros si son iguales, sino no hacer nada
 			}
 		} else {
-			console.println("limite")
+			console.println("limite derecho alcanzado")
 		}
 	}
 	
@@ -144,10 +151,12 @@ object juego {
 					numero.movimientosFaltantes(-1)
 					self.moverIzquierda(numero)
 				}
+			} else {
+				//aca debo sumar los numeros si son iguales, sino no hacer nada				
 			}
 		}
 		else {
-			console.println("limite")
+			console.println("limite izquierdo alcanzado")
 		}
 	}
 	
@@ -174,10 +183,12 @@ object juego {
 					numero.movimientosFaltantes(-1)
 					self.moverArriba(numero)
 				}
+			} else {
+				//aca debo sumar los numeros si son iguales, sino no hacer nada
 			}
 		}
 		else {
-			console.println("limite")
+			console.println("limite superior alcanzado")
 		}
 	}
 	
@@ -205,10 +216,12 @@ method moverAbajo(numero){
 					numero.movimientosFaltantes(-1)
 					self.moverAbajo(numero)
 				}
+			} else {
+				//aca debo sumar los numeros si son iguales, sino no hacer nada
 			}
 		}
 		else {
-			console.println("limite")
+			console.println("limite inferior alcanzado")
 		}
 	}
 		
