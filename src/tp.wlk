@@ -1,6 +1,5 @@
 import wollok.game.*
 
-
 class Numero {
 	var property numero
 	var property position
@@ -41,20 +40,18 @@ class Numero {
 object juego {
 	const property numeros = []
 	var referencia
-	var property intentos
+	var property puntaje = 0
+	var property intentos = 100
 			
-	method iniciar() {
-			
+	method iniciar() {	
 		game.width(6)
 		game.height(7)
 		game.cellSize(100)
 		game.title("2048")
 		game.boardGround("fondo.png")
-
+	
 		self.agregarNumero() 
 		self.agregarNumero()
-		
-		
 		
 		keyboard.up().onPressDo{
 			self.agregarNumero()
@@ -76,9 +73,7 @@ object juego {
 			self.agregarNumero()
 			self.ordenarNumeros("derecha")
 			self.numeros().forEach({num => self.moverNumero(num, "derecha")})
-		
 		}
-
 		
 		game.start()
 	}
@@ -95,18 +90,22 @@ object juego {
 		}
 	}
 	
-	method removeAndAdd(objeto,position){
-		game.removeVisual(objeto)
-		game.addVisualIn(objeto, position)
+	method agregarNumero(){
+		const ejeRandom = self.eje_random()
+		if (intentos > 0){
+			if (!self.estaOcupado(ejeRandom)){
+				referencia = new Numero(numero=2,position=ejeRandom)
+				numeros.add(referencia)
+				game.addVisual(referencia)
+				intentos = 100
+			} else {
+				intentos -= 1
+				self.agregarNumero()
+			} 
+		}
 	}
 	
-	method agregarNumero(){
-		intentos = 50
-		const ejeRandom = self.eje_random()
-		referencia = new Numero(numero=2,position=ejeRandom)
-		numeros.add(referencia)
-		game.addVisual(referencia)
-	}
+	method eje_random() = game.at(new Range(start = 1, end = 4).anyOne(),new Range(start = 1, end = 4).anyOne())
 	
 	method positionX(){
 		return referencia.position().x()
@@ -122,6 +121,10 @@ object juego {
 	
 	method estaOcupado(x,y){
 		return game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() > 0
+	}
+	
+	method estaOcupado(posicion){
+		return game.getObjectsIn(posicion).size() > 0
 	}
 	
 	method moverNumero(numero, direccion){
@@ -141,7 +144,6 @@ object juego {
 	
 		numero.movimientosFaltantes(casilleros)
 		
-		// Si le quedan movimientos
 		if(numero.movimientosFaltantes() > 0) {
 			if (direccion == "derecha" && x < 4) {
 		  		if (!self.estaOcupado(x + 1, y)) {
@@ -152,6 +154,8 @@ object juego {
 		  			if (numero.numero() == self.getNumeroEn(x+1,y).numero()){
 		  				self.fusionarNumeros(numero,self.getNumeroEn(x+1,y))
 		  				self.moverNumero(numero, direccion)
+		  			} else {
+		  				numero.movimientosFaltantes(0)
 		  			}
 		  		}
 		  		
@@ -164,6 +168,8 @@ object juego {
 		  			if (numero.numero() == self.getNumeroEn(x-1,y).numero()){
 		  				self.fusionarNumeros(numero,self.getNumeroEn(x-1,y))
 		  				self.moverNumero(numero, direccion)
+		  			} else {
+		  				numero.movimientosFaltantes(0)
 		  			}
 		  		}
 		  		
@@ -176,6 +182,8 @@ object juego {
 		  			if (numero.numero() == self.getNumeroEn(x,y+1).numero()){
 		  				self.fusionarNumeros(numero,self.getNumeroEn(x,y+1))
 		  				self.moverNumero(numero, direccion)
+		  			} else {
+		  				numero.movimientosFaltantes(0)
 		  			}
 		  		}
 			} else if (direccion == "abajo" && y > 1) {
@@ -187,44 +195,28 @@ object juego {
 		  			if (numero.numero() == self.getNumeroEn(x,y-1).numero()){
 		  				self.fusionarNumeros(numero,self.getNumeroEn(x,y-1))
 		  				self.moverNumero(numero, direccion)
+		  			} else {
+		  				numero.movimientosFaltantes(0)
 		  			}
 		  		}
 			}
 		}
 
 	}
-		
-	method eje_random(){
-		
-		if (intentos == 0) {
-    		console.println("No hay lugares disponibles en el tablero.")
-  		}
-		
-		const ejeX = new Range(start = 1, end = 4).anyOne()
-		const ejeY = new Range(start = 1, end = 4).anyOne()
-		
-		if (self.estaOcupado(ejeX,ejeY) && intentos > 0){
-			intentos -= 1
-			return self.eje_random()
-		} else {
-			return game.at(ejeX,ejeY)
-		} 
-
-	}
 	
 	method fusionarNumeros(numero1, numero2) {
-    if (numero1.numero() == numero2.numero()) {
-        numero1.numero(numero1.numero()*2)
-        numero1.image()
-        game.removeVisual(numero2)
-        self.numeros().remove(numero2)
-    } 
-}
+	    if (numero1.numero() == numero2.numero()) {
+	        numero1.numero(numero1.numero()*2)
+	        puntaje += numero1.numero()
+	        numero1.image()
+	        game.removeVisual(numero2)
+	        self.numeros().remove(numero2)
+	    } 
+	}
 
 	method getNumeroEn(x, y) {
 		return game.getObjectsIn(game.at(x,y)).head()
 	}
-	
 }
 	
 
