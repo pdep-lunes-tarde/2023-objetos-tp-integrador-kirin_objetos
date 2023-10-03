@@ -2,9 +2,11 @@ import wollok.game.*
 
 
 class Numero {
-	const numero
+	var property numero
 	var property position
 	var movimientosFaltantes = 0
+	
+	method numero() = numero
 	
 	method movimientosFaltantes() = movimientosFaltantes
 	
@@ -99,7 +101,7 @@ object juego {
 	}
 	
 	method agregarNumero(){
-		intentos = 16
+		intentos = 50
 		const ejeRandom = self.eje_random()
 		referencia = new Numero(numero=2,position=ejeRandom)
 		numeros.add(referencia)
@@ -119,7 +121,7 @@ object juego {
 	}
 	
 	method estaOcupado(x,y){
-		return game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() != 0
+		return game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() > 0
 	}
 	
 	method moverNumero(numero, direccion){
@@ -138,32 +140,58 @@ object juego {
 		}
 	
 		numero.movimientosFaltantes(casilleros)
-	
-		if (direccion == "derecha" && x < 4) {
-	  		if (!self.estaOcupado(x + 1, y) && numero.movimientosFaltantes() > 0) {
-	    		numero.derecha(1)
-	    		numero.movimientosFaltantes(-1)
-	    		self.moverNumero(numero, direccion)
-	  		}
-		} else if (direccion == "izquierda" && x > 1) {
-			if (!self.estaOcupado(x - 1, y) && numero.movimientosFaltantes() > 0) {
-				numero.izquierda(1)
-				numero.movimientosFaltantes(-1)
-				self.moverNumero(numero, direccion)
+		
+		// Si le quedan movimientos
+		if(numero.movimientosFaltantes() > 0) {
+			if (direccion == "derecha" && x < 4) {
+		  		if (!self.estaOcupado(x + 1, y)) {
+		    		numero.derecha(1)
+		    		numero.movimientosFaltantes(-1)
+		    		self.moverNumero(numero, direccion)
+		  		} else {
+		  			if (numero.numero() == self.getNumeroEn(x+1,y).numero()){
+		  				self.fusionarNumeros(numero,self.getNumeroEn(x+1,y))
+		  				self.moverNumero(numero, direccion)
+		  			}
+		  		}
+		  		
+			} else if (direccion == "izquierda" && x > 1) {
+				if (!self.estaOcupado(x - 1, y)) {
+					numero.izquierda(1)
+					numero.movimientosFaltantes(-1)
+					self.moverNumero(numero, direccion)
+				} else {
+		  			if (numero.numero() == self.getNumeroEn(x-1,y).numero()){
+		  				self.fusionarNumeros(numero,self.getNumeroEn(x-1,y))
+		  				self.moverNumero(numero, direccion)
+		  			}
+		  		}
+		  		
+	  		} else if (direccion == "arriba" && y < 4) {
+				if (!self.estaOcupado(x, y + 1) ) {
+		  			numero.arriba(1)
+		  			numero.movimientosFaltantes(-1)
+		  			self.moverNumero(numero, direccion)
+				} else {
+		  			if (numero.numero() == self.getNumeroEn(x,y+1).numero()){
+		  				self.fusionarNumeros(numero,self.getNumeroEn(x,y+1))
+		  				self.moverNumero(numero, direccion)
+		  			}
+		  		}
+			} else if (direccion == "abajo" && y > 1) {
+		  		if (!self.estaOcupado(x, y - 1)) {
+		    		numero.abajo(1)
+		    		numero.movimientosFaltantes(-1)
+		    		self.moverNumero(numero, direccion)
+		  		}  else {
+		  			if (numero.numero() == self.getNumeroEn(x,y-1).numero()){
+		  				self.fusionarNumeros(numero,self.getNumeroEn(x,y-1))
+		  				self.moverNumero(numero, direccion)
+		  			}
+		  		}
 			}
-	  	} else if (direccion == "arriba" && y < 4) {
-			if (!self.estaOcupado(x, y + 1) && numero.movimientosFaltantes() > 0) {
-	  			numero.arriba(1)
-	  			numero.movimientosFaltantes(-1)
-	  			self.moverNumero(numero, direccion)
-			}
-		} else if (direccion == "abajo" && y > 1) {
-	  		if (!self.estaOcupado(x, y - 1) && numero.movimientosFaltantes() > 0) {
-	    		numero.abajo(1)
-	    		numero.movimientosFaltantes(-1)
-	    		self.moverNumero(numero, direccion)
-	  		}
 		}
+
 	}
 		
 	method eje_random(){
@@ -183,5 +211,21 @@ object juego {
 		} 
 
 	}
-
+	
+	method fusionarNumeros(numero1, numero2) {
+    if (numero1.numero() == numero2.numero()) {
+        numero1.numero(numero1.numero()*2)
+        numero1.image()
+        game.removeVisual(numero2)
+        self.numeros().remove(numero2)
+    } 
 }
+
+	method getNumeroEn(x, y) {
+		return game.getObjectsIn(game.at(x,y)).head()
+	}
+	
+}
+	
+
+
