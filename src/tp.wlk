@@ -4,7 +4,6 @@ class Numero {
 	var property numero
 	var property position
 	var movimientosFaltantes = 0
-	var property fusionado = false
 	
 	method numero() = numero
 	
@@ -50,8 +49,30 @@ object juego {
 		game.cellSize(100)
 		game.title("2048")
 		game.boardGround("fondo.png")
-	
-		self.agregarNumero() 
+		
+		/*	Bugs detectados:
+		 * 
+		 * 	Si se llena el tablero, el juego deja de funcionar porque se agotan los "intentos"
+		 * 	que agregarNumero hace cuando añade numeros nuevos. Hay que buscar otra forma de
+		 *  poner esa logica para que detecte sin entrar en un bucle infinito que no hay mas 
+		 *  espacio en el tablero. Esto es un bug porque puede ser que el tablero esté lleno
+		 *  y con un movimiento a cualquier direccion se abran nuevos espacios, entonces deberia
+		 * 	dejarlo abierto hasta que ya no haya mas posibilidades de juntar nuevos bloques en
+		 * 	ninguna dirección, y ahi es cuando deberia salir la pantalla del game over.
+		 * 
+		 */
+		 
+		 /*	Falta por hacer:
+		  * 
+		  * Implementar puntajes en pantalla (ya esta la variable con el puntaje)
+		  * Implementar boton de reiniciar juego
+		  * Implementar cantidad de movimientos? 
+		  * Implementar pantalla de ganador
+		  * Agregar musica?
+		  * 
+		  */
+
+		self.agregarNumero()
 		self.agregarNumero()
 		
 		keyboard.up().onPressDo{
@@ -106,6 +127,13 @@ object juego {
 		}
 	}
 	
+	// Solo para troubleshooting
+	method agregarNumeroEn(cual,x,y){		
+		referencia = new Numero(numero=cual,position=game.at(x,y))
+		numeros.add(referencia)
+		game.addVisual(referencia)	
+	}
+	
 	method eje_random() = game.at(new Range(start = 1, end = 4).anyOne(),new Range(start = 1, end = 4).anyOne())
 	
 	method positionX(){
@@ -150,14 +178,11 @@ object juego {
 		  		if (!self.estaOcupado(x + 1, y)) {
 		    		numero.derecha(1)
 		    		numero.movimientosFaltantes(-1)
-		    		numero.fusionado(false)
 		    		self.moverNumero(numero, direccion)
 		  		} else {
 		  			const numero_a_la_derecha = self.getNumeroEn(x+1,y)
-		  			if (numero.numero() == numero_a_la_derecha.numero() && !numero.fusionado() && !numero_a_la_derecha.fusionado()){
+		  			if (numero.numero() == numero_a_la_derecha.numero()){
 		  				self.fusionarNumeros(numero,numero_a_la_derecha)
-		  				numero.fusionado(true)
-		  				numero_a_la_derecha.fusionado(true)
 		  				self.moverNumero(numero, direccion)
 		  			} else {
 		  				numero.movimientosFaltantes(0)
@@ -168,14 +193,11 @@ object juego {
 				if (!self.estaOcupado(x - 1, y)) {
 					numero.izquierda(1)
 					numero.movimientosFaltantes(-1)
-					numero.fusionado(false)
 					self.moverNumero(numero, direccion)
 				} else {
 					const numero_a_la_izquierda = self.getNumeroEn(x-1,y)
-		  			if (numero.numero() == numero_a_la_izquierda.numero() &&  !numero.fusionado() && !numero_a_la_izquierda.fusionado()){
+		  			if (numero.numero() == numero_a_la_izquierda.numero()){
 		  				self.fusionarNumeros(numero,numero_a_la_izquierda)
-		  				numero.fusionado(true)
-		  				numero_a_la_izquierda.fusionado(true)
 		  				self.moverNumero(numero, direccion)
 		  			} else {
 		  				numero.movimientosFaltantes(0)
@@ -186,14 +208,11 @@ object juego {
 				if (!self.estaOcupado(x, y + 1) ) {
 		  			numero.arriba(1)
 		  			numero.movimientosFaltantes(-1)
-		  			numero.fusionado(false)
 		  			self.moverNumero(numero, direccion)
 				} else {
 					const numero_arriba = self.getNumeroEn(x,y+1)
-		  			if (numero.numero() == numero_arriba.numero() && !numero.fusionado() && !numero_arriba.fusionado()) {
+		  			if (numero.numero() == numero_arriba.numero()) {
 		  				self.fusionarNumeros(numero,numero_arriba)
-		  				numero.fusionado(true)
-		  				numero_arriba.fusionado(true)
 		  				self.moverNumero(numero, direccion)
 		  			} else {
 		  				numero.movimientosFaltantes(0)
@@ -203,14 +222,11 @@ object juego {
 		  		if (!self.estaOcupado(x, y - 1)) {
 		    		numero.abajo(1)
 		    		numero.movimientosFaltantes(-1)
-		    		numero.fusionado(false)
 		    		self.moverNumero(numero, direccion)
 		  		}  else {
 		  			const numero_abajo = self.getNumeroEn(x,y-1)
-		  			if (numero.numero() == self.getNumeroEn(x,y-1).numero() && !numero.fusionado() && !numero_abajo.fusionado()){
+		  			if (numero.numero() == self.getNumeroEn(x,y-1).numero()){
 		  				self.fusionarNumeros(numero,numero_abajo)
-		  				numero.fusionado(true)
-		  				numero_abajo.fusionado(true)
 		  				self.moverNumero(numero, direccion)
 		  			} else {
 		  				numero.movimientosFaltantes(0)
@@ -235,6 +251,3 @@ object juego {
 		return game.getObjectsIn(game.at(x,y)).head()
 	}
 }
-	
-
-
