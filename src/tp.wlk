@@ -25,7 +25,6 @@ class Numero {
     	position = position.right(casilleros)
   	}
   	
-  	
   	method positionX(){
 		return self.position().x()
 	}
@@ -40,8 +39,10 @@ class Numero {
 object juego {
 	const property numeros = []
 	var referencia
-				
+	var property intentos
+			
 	method iniciar() {
+			
 		game.width(6)
 		game.height(7)
 		game.cellSize(100)
@@ -51,32 +52,45 @@ object juego {
 		self.agregarNumero() 
 		self.agregarNumero()
 		
-//		keyboard.up().onPressDo{self.moverArriba()}
-//		keyboard.down().onPressDo{self.moverAbajo()}
-//		keyboard.left().onPressDo{self.moverIzquierda()}
-//		keyboard.right().onPressDo{self.moverDerecha()}
-
-		self.numeros().forEach({num =>
-					keyboard.up().onPressDo{
-						self.moverArriba(num)
-					}
-					keyboard.down().onPressDo{
-						self.moverAbajo(num)
-					}
-					keyboard.left().onPressDo{
-						self.moverIzquierda(num)
-					}
-					keyboard.right().onPressDo{
-						self.moverDerecha(num)
-					}
-					// game.onCollideDo(num, { element => }) Uso onCollide o whenCollide?
-				})
-
-		// game.whenKeyPressedDo(up, self.agregarNumero()) Esto es mejor para añadir nuevos numeros?
 		
+		
+		keyboard.up().onPressDo{
+			self.agregarNumero()
+			self.ordenarNumeros("arriba")
+			self.numeros().forEach({num => self.moverNumero(num, "arriba")})
+		}
+		
+		keyboard.down().onPressDo{
+			self.agregarNumero()
+			self.ordenarNumeros("abajo")
+			self.numeros().forEach({num => self.moverNumero(num, "abajo")})
+		}
+		keyboard.left().onPressDo{
+			self.agregarNumero()
+			self.ordenarNumeros("izquierda")
+			self.numeros().forEach({num => self.moverNumero(num, "izquierda")})
+		}
+		keyboard.right().onPressDo{
+			self.agregarNumero()
+			self.ordenarNumeros("derecha")
+			self.numeros().forEach({num => self.moverNumero(num, "derecha")})
+		
+		}
 
 		
 		game.start()
+	}
+	
+	method ordenarNumeros(direccion) {
+		if (direccion == "derecha") {
+	 		 numeros.sortBy{ num1,num2 => num1.positionX() > num2.positionX() }
+		} else if (direccion == "izquierda") {
+			numeros.sortBy{ num1,num2 => num1.positionX() < num2.positionX() }
+		} else if (direccion == "abajo") {
+	 		numeros.sortBy{ num1,num2 => num1.positionY() < num2.positionY() }
+		} else if (direccion == "arriba") {
+			numeros.sortBy{ num1,num2 => num1.positionY() > num2.positionY() }
+		}
 	}
 	
 	method removeAndAdd(objeto,position){
@@ -85,9 +99,9 @@ object juego {
 	}
 	
 	method agregarNumero(){
-		const ejeX = self.eje_random()
-		const ejeY = self.eje_random()
-		referencia = new Numero(numero=2,position=game.at(ejeX,ejeY))
+		intentos = 16
+		const ejeRandom = self.eje_random()
+		referencia = new Numero(numero=2,position=ejeRandom)
 		numeros.add(referencia)
 		game.addVisual(referencia)
 	}
@@ -108,125 +122,65 @@ object juego {
 		return game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() != 0
 	}
 	
-	method moverDerecha(numero){
+	method moverNumero(numero, direccion){
 		const x = numero.positionX()
-		const casilleros = 4 - x
-		numero.movimientosFaltantes(casilleros)
-		
-		if(x < 4){
-			if(!self.estaOcupado(numero.positionX()+1,numero.positionY())){
-				if(numero.movimientosFaltantes()>0){
-					numero.derecha(1)
-					numero.movimientosFaltantes(-1)
-					self.moverDerecha(numero)
-				}
-			} else {
-				//aca debo sumar los numeros si son iguales, sino no hacer nada
-			}
-		} else {
-			console.println("limite derecho alcanzado")
-		}
-	}
-	
-//	method moverIzquierda(numero){
-//		const x = numero.positionX()
-//		const casilleros = x - 1
-//		if(x > 1){
-//			numero.izquierda(casilleros)
-//		} else {
-//			console.println("limite")
-//		}
-//	}
-	
-	
-	method moverIzquierda(numero){
-		const x = numero.positionX()
-		const casilleros = x - 1
-		numero.movimientosFaltantes(casilleros)
-		
-		if(x > 1){
-			if(!self.estaOcupado(numero.positionX()-1,numero.positionY())){
-				if(numero.movimientosFaltantes()> 0){
-					numero.izquierda(1)
-					numero.movimientosFaltantes(-1)
-					self.moverIzquierda(numero)
-				}
-			} else {
-				//aca debo sumar los numeros si son iguales, sino no hacer nada				
-			}
-		}
-		else {
-			console.println("limite izquierdo alcanzado")
-		}
-	}
-	
-//	method moverArriba(numero){
-//		const y = numero.positionY()
-//		const casilleros = 4 - y
-//		if(y < 4){
-//			numero.arriba(casilleros)
-//		} else {
-//			console.println("limite")
-//		}
-//	}
-	
-	
-	method moverArriba(numero){
 		const y = numero.positionY()
-		const casilleros = 4 - y
+		var casilleros
+	
+		if (direccion == "derecha") {
+	  		casilleros = 4 - x
+		} else if (direccion == "izquierda") {
+	  		casilleros = x - 1
+		} else if (direccion == "arriba") {
+	  		casilleros = 4 - y
+		} else if (direccion == "abajo") {
+	  		casilleros = y - 1
+		}
+	
 		numero.movimientosFaltantes(casilleros)
-		
-		if(y < 4){
-			if(!self.estaOcupado(numero.positionX(),numero.positionY()+1)){
-				if(numero.movimientosFaltantes()> 0){
-					numero.arriba(1)
-					numero.movimientosFaltantes(-1)
-					self.moverArriba(numero)
-				}
-			} else {
-				//aca debo sumar los numeros si son iguales, sino no hacer nada
+	
+		if (direccion == "derecha" && x < 4) {
+	  		if (!self.estaOcupado(x + 1, y) && numero.movimientosFaltantes() > 0) {
+	    		numero.derecha(1)
+	    		numero.movimientosFaltantes(-1)
+	    		self.moverNumero(numero, direccion)
+	  		}
+		} else if (direccion == "izquierda" && x > 1) {
+			if (!self.estaOcupado(x - 1, y) && numero.movimientosFaltantes() > 0) {
+				numero.izquierda(1)
+				numero.movimientosFaltantes(-1)
+				self.moverNumero(numero, direccion)
 			}
-		}
-		else {
-			console.println("limite superior alcanzado")
-		}
-	}
-	
-	
-//	method moverAbajo(numero){
-//		const y = numero.positionY()
-//		const casilleros = y - 1
-//		if(y > 1){
-//			numero.abajo(casilleros)
-//		} else {
-//			console.println("limite")
-//		}
-//	}
-	
-
-method moverAbajo(numero){
-		const y = numero.positionY()
-		const casilleros = y - 1
-		numero.movimientosFaltantes(casilleros)
-		
-		if(y > 1){
-			if(!self.estaOcupado(numero.positionX(),numero.positionY()+1)){
-				if(numero.movimientosFaltantes()> 0){
-					numero.abajo(1)
-					numero.movimientosFaltantes(-1)
-					self.moverAbajo(numero)
-				}
-			} else {
-				//aca debo sumar los numeros si son iguales, sino no hacer nada
+	  	} else if (direccion == "arriba" && y < 4) {
+			if (!self.estaOcupado(x, y + 1) && numero.movimientosFaltantes() > 0) {
+	  			numero.arriba(1)
+	  			numero.movimientosFaltantes(-1)
+	  			self.moverNumero(numero, direccion)
 			}
-		}
-		else {
-			console.println("limite inferior alcanzado")
+		} else if (direccion == "abajo" && y > 1) {
+	  		if (!self.estaOcupado(x, y - 1) && numero.movimientosFaltantes() > 0) {
+	    		numero.abajo(1)
+	    		numero.movimientosFaltantes(-1)
+	    		self.moverNumero(numero, direccion)
+	  		}
 		}
 	}
 		
 	method eje_random(){
-		return new Range(start = 1, end = 4).anyOne()
+		
+		if (intentos == 0) {
+    		console.println("No hay lugares disponibles en el tablero.")
+  		}
+		
+		const ejeX = new Range(start = 1, end = 4).anyOne()
+		const ejeY = new Range(start = 1, end = 4).anyOne()
+		
+		if (self.estaOcupado(ejeX,ejeY) && intentos > 0){
+			intentos -= 1
+			return self.eje_random()
+		} else {
+			return game.at(ejeX,ejeY)
+		} 
 
 	}
 
