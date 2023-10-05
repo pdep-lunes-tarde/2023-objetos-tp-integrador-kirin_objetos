@@ -48,7 +48,7 @@ object juego {
 		game.height(7)
 		game.cellSize(100)
 		game.title("2048")
-		game.boardGround("fondo.png")
+		game.boardGround("assets/fondo.png")
 		
 		/*	Bugs detectados:
 		 * 

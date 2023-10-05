@@ -1,5 +1,25 @@
 import tp.*
 
-test "Test de ejemplo" {
-		assert.equals(4, 2 + 2)
+describe "Agregar número" {
+	test "agregar un número 2 en posicion (2, 2)." {	
+			juego.agregarNumeroEn(2,2,2)
+			
+			assert.that(juego.estaOcupado(2,2))
+	}
+	
+	test "agregar dos números 2 en posicion (2, 2) y (3,3)." {	
+			juego.agregarNumeroEn(2,2,2)
+			juego.agregarNumeroEn(2,3,3)
+			
+			assert.that(juego.estaOcupado(2,2))
+			assert.that(juego.estaOcupado(3,3))
+	}
+}
+
+describe "Mover número " {
+	test "mover un número al borde superior"{
+
+	
+	}
+	
 }
