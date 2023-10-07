@@ -18,8 +18,7 @@ describe "Agregar número" {
 
 describe "Mover número " {
 	test "mover un número al borde superior"{
-
-	
+			
 	}
 	
 }

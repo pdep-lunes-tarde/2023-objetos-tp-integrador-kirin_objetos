@@ -40,16 +40,14 @@ class Numero {
 object juego {
 	const property numeros = []
 	var referencia
-	var property puntaje = 0
-	var property intentos = 100
+	var puntajes = 0
+	var movimientos = 0
 			
 	method iniciar() {	
-		game.width(6)
-		game.height(7)
-		game.cellSize(100)
-		game.title("2048")
-		game.boardGround("assets/fondo.png")
 		
+		self.hacerConfiguracionInicial()
+		self.configurarTeclas()
+		game.start()
 		/*	Bugs detectados:
 		 * 
 		 * 	Si se llena el tablero, el juego deja de funcionar porque se agotan los "intentos"
@@ -64,40 +62,61 @@ object juego {
 		 
 		 /*	Falta por hacer:
 		  * 
-		  * Implementar puntajes en pantalla (ya esta la variable con el puntaje)
+		  * Implementar puntajes en pantalla ✔
 		  * Implementar boton de reiniciar juego
-		  * Implementar cantidad de movimientos? 
+		  * Implementar cantidad de movimientos ✔
 		  * Implementar pantalla de ganador
 		  * Agregar musica?
 		  * 
-		  */
-
-		self.agregarNumero()
-		self.agregarNumero()
+		  */	
+	}
+	
+	method hacerConfiguracionInicial() {
+		game.width(6)
+		game.height(7)
+		game.cellSize(100)
+		game.title("2048")
+		game.boardGround("assets/fondo.png")
+		game.addVisual(puntaje)
+		game.addVisual(movimiento)
 		
+		puntajes = 0
+		movimientos = 0
+			
+		self.agregarNumero()
+		self.agregarNumero()
+	}
+	
+	method configurarTeclas() {
 		keyboard.up().onPressDo{
 			self.ordenarNumeros("arriba")
 			self.numeros().forEach({num => self.moverNumero(num, "arriba")})
 			self.agregarNumero()
+			movimientos += 1
 		}
 		
 		keyboard.down().onPressDo{
 			self.ordenarNumeros("abajo")
 			self.numeros().forEach({num => self.moverNumero(num, "abajo")})
 			self.agregarNumero()
+			movimientos += 1
 		}
 		keyboard.left().onPressDo{
 			self.ordenarNumeros("izquierda")
 			self.numeros().forEach({num => self.moverNumero(num, "izquierda")})
 			self.agregarNumero()
+			movimientos += 1
 		}
 		keyboard.right().onPressDo{
 			self.ordenarNumeros("derecha")
 			self.numeros().forEach({num => self.moverNumero(num, "derecha")})
 			self.agregarNumero()
+			movimientos += 1
 		}
-		
-		game.start()
+		keyboard.r().onPressDo{
+			//game.clear()
+			//self.iniciar()
+		}
 	}
 	
 	method ordenarNumeros(direccion) {
@@ -114,16 +133,17 @@ object juego {
 	
 	method agregarNumero(){
 		const ejeRandom = self.eje_random()
-		if (intentos > 0){
-			if (!self.estaOcupado(ejeRandom)){
-				referencia = new Numero(numero=2,position=ejeRandom)
-				numeros.add(referencia)
-				game.addVisual(referencia)
-				intentos = 100
+		
+		if(!estado.estadoTodoOcupado()){
+				if (!self.estaOcupado(ejeRandom)){
+					referencia = new Numero(numero=2,position=ejeRandom)
+					numeros.add(referencia)
+					game.addVisual(referencia)
+				} else {
+					self.agregarNumero()
+				} 
 			} else {
-				intentos -= 1
-				self.agregarNumero()
-			} 
+				console.println("está todo ocupado.")
 		}
 	}
 	
@@ -238,16 +258,73 @@ object juego {
 	}
 	
 	method fusionarNumeros(numero1, numero2) {
-	    if (numero1.numero() == numero2.numero()) {
+		if(!estado.estadoTodoOcupado()){
+			if (numero1.numero() == numero2.numero()) {
 	        numero1.numero(numero1.numero()*2)
-	        puntaje += numero1.numero()
+	        puntajes += numero1.numero()
 	        numero1.image()
 	        game.removeVisual(numero2)
 	        self.numeros().remove(numero2)
-	    } 
+	    	} 
+		}
 	}
 
 	method getNumeroEn(x, y) {
 		return game.getObjectsIn(game.at(x,y)).head()
 	}
+	
+	method puntajes(){
+		return puntajes
+	}
+	
+	method movimientos(){
+		return movimientos
+	}
+	
+}
+
+object puntaje {
+	method position() = game.at(2,5)
+	method image() = "assets/label.png"
+	method text() = "Puntajes " + juego.puntajes()
+	method textColor() = "FFFFFF"
+}
+
+object movimiento {
+	method position() = game.at(4,5)
+	method image() = "assets/label.png"
+	method text() = "Movimientos " + juego.movimientos()
+	method textColor() = "FFFFFF"
+}
+
+object estado { // NO FUNCIONA
+	const estadoLista = [
+		juego.estaOcupado(1,1),
+		juego.estaOcupado(1,2),
+		juego.estaOcupado(1,3),
+		juego.estaOcupado(1,4),
+		
+		juego.estaOcupado(2,1),
+		juego.estaOcupado(2,2),
+		juego.estaOcupado(2,3),
+		juego.estaOcupado(2,4),
+		
+		juego.estaOcupado(3,1),
+		juego.estaOcupado(3,2),
+		juego.estaOcupado(3,3),
+		juego.estaOcupado(3,4),
+		
+		juego.estaOcupado(4,1),
+		juego.estaOcupado(4,2),
+		juego.estaOcupado(4,3),
+		juego.estaOcupado(4,4)
+	]
+	method estado(){
+		return estadoLista
+	}  
+	
+	method estadoTodoOcupado(){
+		return estadoLista.all({ elemento => elemento == true })
+	}
+
 }
