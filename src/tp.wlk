@@ -42,6 +42,8 @@ object juego {
 	var referencia
 	var puntajes
 	var movimientos
+	var musica
+	var volumen = 0.2
 			
 	method iniciar() {	
 		
@@ -67,8 +69,8 @@ object juego {
 		  * Implementar puntajes en pantalla ✔
 		  * Implementar boton de reiniciar juego
 		  * Implementar cantidad de movimientos ✔
-		  * Implementar pantalla de ganador
-		  * Agregar musica?
+		  * Implementar pantalla de ganador ✔
+		  * Agregar musica? ✔
 		  * 
 		  */	
 	}
@@ -80,8 +82,9 @@ object juego {
 		game.cellSize(100)
 		game.title("2048")
 		game.boardGround("assets/fondo.png")
-		game.addVisual(puntaje)
-		game.addVisual(movimiento)
+		game.addVisual(pantallaPuntaje)
+		game.addVisual(pantallaMovimiento)
+		self.iniciarMusica("assets/sleepTight.mp3")
 		
 		puntajes = 0
 		movimientos = 0
@@ -121,6 +124,7 @@ object juego {
 		}
 		
 //		keyboard.r().onPressDo{
+//			self.perdiste()
 //			game.clear()
 //			self.iniciar()
 //		}
@@ -160,6 +164,7 @@ object juego {
 			} else {
 				
 				console.println("Game over. Perdiste.")
+				self.perdiste()
 				// Aca hay que invocar a la pantalla de perdedor
 		}
 	}
@@ -308,6 +313,20 @@ object juego {
 	
 	method movimientos() = movimientos
 	
+	method musica() = musica
+	
+	method iniciarMusica(music) {
+		musica = game.sound(music)
+		musica.shouldLoop(true)
+		musica.volume(volumen)
+		game.schedule(100, {musica.play()})
+	}
+	
+	method perdiste() {
+		game.schedule(800, {self.musica().stop()})
+		game.schedule(1000, {game.addVisual(pantallaPerder)})
+	}
+	
 }
 
 object tablero{
@@ -370,18 +389,22 @@ object tablero{
 	
 }
 
-object puntaje {
+
+object pantallaPuntaje {
 	method position() = game.at(2,6)
 //	method image() = "assets/label.png"
 	method text() = "Puntos: " + juego.puntajes()
 	method textColor() = "FFFFFF"
 }
 
-object movimiento {
+object pantallaMovimiento {
 	method position() = game.at(4,6)
 //	method image() = "assets/label.png"
 	method text() = "Movimientos: " + juego.movimientos()
 	method textColor() = "FFFFFF"
 }
 
-
+object pantallaPerder {
+	method position() = game.at(0,0)
+	method image() = "assets/gameOver.png"
+}
