@@ -16,38 +16,40 @@ class Numero {
 	method arriba(casilleros) {
  		position = position.up(casilleros)
  	}
+ 	
   	method abajo(casilleros) {
  		position = position.down(casilleros)
  	}
+ 	
   	method izquierda(casilleros) {
-    	position = position.left(casilleros) 
+    	position = position.left(casilleros)
   	}
+  	
   	method derecha(casilleros) {
     	position = position.right(casilleros)
   	}
   	
-  	method positionX(){
-		return self.position().x()
-	}
+  	method positionX() = self.position().x()
 	
-	method positionY(){
-		return self.position().y()
-	}
+	method positionY() = self.position().y()
 
 	method image() = "assets/" + numero + ".png"
 }
 
 object juego {
+	
 	const property numeros = []
 	var referencia
-	var puntajes = 0
-	var movimientos = 0
+	var puntajes
+	var movimientos
 			
 	method iniciar() {	
 		
 		self.hacerConfiguracionInicial()
 		self.configurarTeclas()
+		
 		game.start()
+		
 		/*	Bugs detectados:
 		 * 
 		 * 	Si se llena el tablero, el juego deja de funcionar porque se agotan los "intentos"
@@ -72,6 +74,7 @@ object juego {
 	}
 	
 	method hacerConfiguracionInicial() {
+		
 		game.width(6)
 		game.height(7)
 		game.cellSize(100)
@@ -82,12 +85,15 @@ object juego {
 		
 		puntajes = 0
 		movimientos = 0
+		
+		tablero.init()
 			
 		self.agregarNumero()
 		self.agregarNumero()
 	}
 	
 	method configurarTeclas() {
+		
 		keyboard.up().onPressDo{
 			self.ordenarNumeros("arriba")
 			self.numeros().forEach({num => self.moverNumero(num, "arriba")})
@@ -113,13 +119,16 @@ object juego {
 			self.agregarNumero()
 			movimientos += 1
 		}
-		keyboard.r().onPressDo{
-			//game.clear()
-			//self.iniciar()
-		}
+		
+//		keyboard.r().onPressDo{
+//			game.clear()
+//			self.iniciar()
+//		}
+
 	}
 	
 	method ordenarNumeros(direccion) {
+		
 		if (direccion == "derecha") {
 	 		 numeros.sortBy{ num1,num2 => num1.positionX() > num2.positionX() }
 		} else if (direccion == "izquierda") {
@@ -132,20 +141,30 @@ object juego {
 	}
 	
 	method agregarNumero(){
+		
 		const ejeRandom = self.eje_random()
 		
-		if(!estado.estadoTodoOcupado()){
+		if(!tablero.estaLleno()){
+			
 				if (!self.estaOcupado(ejeRandom)){
+					
 					referencia = new Numero(numero=2,position=ejeRandom)
 					numeros.add(referencia)
+					tablero.agregar(referencia,ejeRandom)
 					game.addVisual(referencia)
+					
 				} else {
 					self.agregarNumero()
-				} 
+				}
+				 
 			} else {
-				console.println("está todo ocupado.")
+				
+				console.println("Game over. Perdiste.")
+				// Aca hay que invocar a la pantalla de perdedor
 		}
 	}
+	
+	method eje_random() = game.at(new Range(start = 1, end = 4).anyOne(),new Range(start = 1, end = 4).anyOne())
 	
 	// Solo para troubleshooting
 	method agregarNumeroEn(cual,x,y){		
@@ -154,27 +173,11 @@ object juego {
 		game.addVisual(referencia)	
 	}
 	
-	method eje_random() = game.at(new Range(start = 1, end = 4).anyOne(),new Range(start = 1, end = 4).anyOne())
+	method coordenada_a_posicion(x,y) = game.at(x,y)
 	
-	method positionX(){
-		return referencia.position().x()
-	}
+	method estaOcupado(x,y) = game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() > 0
 	
-	method positionY(){
-		return referencia.position().y()
-	}
-	
-	method coordenada_a_posicion(x,y){
-		return game.at(x,y)
-	}
-	
-	method estaOcupado(x,y){
-		return game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() > 0
-	}
-	
-	method estaOcupado(posicion){
-		return game.getObjectsIn(posicion).size() > 0
-	}
+	method estaOcupado(posicion) = game.getObjectsIn(posicion).size() > 0
 	
 	method moverNumero(numero, direccion){
 		const x = numero.positionX()
@@ -194,9 +197,11 @@ object juego {
 		numero.movimientosFaltantes(casilleros)
 		
 		if(numero.movimientosFaltantes() > 0) {
+			
 			if (direccion == "derecha" && x < 4) {
 		  		if (!self.estaOcupado(x + 1, y)) {
 		    		numero.derecha(1)
+//		    		casilleros.actualizar(numero,numero.position())
 		    		numero.movimientosFaltantes(-1)
 		    		self.moverNumero(numero, direccion)
 		  		} else {
@@ -258,73 +263,131 @@ object juego {
 	}
 	
 	method fusionarNumeros(numero1, numero2) {
-		if(!estado.estadoTodoOcupado()){
+		
+		if(!tablero.estaLleno()){
 			if (numero1.numero() == numero2.numero()) {
-	        numero1.numero(numero1.numero()*2)
-	        puntajes += numero1.numero()
-	        numero1.image()
-	        game.removeVisual(numero2)
+				
+	        	numero1.numero(numero1.numero()*2)
+	        	puntajes += numero1.numero()
+	        	numero1.image()
+	        	tablero.borrar(numero2.position())
+	        	game.removeVisual(numero2)
+	        	
 	        self.numeros().remove(numero2)
 	    	} 
 		}
 	}
 
-	method getNumeroEn(x, y) {
-		return game.getObjectsIn(game.at(x,y)).head()
+	method getNumeroEn(x, y) = game.getObjectsIn(game.at(x,y)).head()
+	
+	method puntajes() = puntajes
+	
+	method movimientos() = movimientos
+	
+}
+
+object tablero{
+
+	const casilleros = new Dictionary()
+	
+	method casilleros() = casilleros
+	
+	method init(){
+		
+		/*
+		
+		 a Dictionary [
+		 1@1 -> 0, 1@2 -> 0, 1@3 -> 0, 1@4 -> 0,
+		 2@1 -> 0, 2@2 -> 0, 2@3 -> 0, 2@4 -> 0,
+		 3@1 -> 0, 3@2 -> 0, 3@3 -> 0, 3@4 -> 0,
+		 4@1 -> 0, 4@2 -> 0, 4@3 -> 0, 4@4 -> 0]
+		 
+		*/
+		
+		self.agregar(0,juego.coordenada_a_posicion(1,1))
+		self.agregar(0,juego.coordenada_a_posicion(2,1))
+		self.agregar(0,juego.coordenada_a_posicion(3,1))
+		self.agregar(0,juego.coordenada_a_posicion(4,1))
+		
+		self.agregar(0,juego.coordenada_a_posicion(1,2))
+		self.agregar(0,juego.coordenada_a_posicion(2,2))
+		self.agregar(0,juego.coordenada_a_posicion(3,2))
+		self.agregar(0,juego.coordenada_a_posicion(4,2))
+		
+		self.agregar(0,juego.coordenada_a_posicion(1,3))
+		self.agregar(0,juego.coordenada_a_posicion(2,3))
+		self.agregar(0,juego.coordenada_a_posicion(3,3))
+		self.agregar(0,juego.coordenada_a_posicion(4,3))
+		
+		self.agregar(0,juego.coordenada_a_posicion(1,4))
+		self.agregar(0,juego.coordenada_a_posicion(2,4))
+		self.agregar(0,juego.coordenada_a_posicion(3,4))
+		self.agregar(0,juego.coordenada_a_posicion(4,4))
 	}
 	
-	method puntajes(){
-		return puntajes
+	method agregar(numero,coordenadas){
+		casilleros.put(coordenadas,numero)
 	}
 	
-	method movimientos(){
-		return movimientos
+	method borrar(coordenadas){
+		casilleros.remove(coordenadas)
+		self.agregar(0,coordenadas)
 	}
+	
+	method buscar(coordenadas) = casilleros.get(coordenadas)
+	
+	method actualizar(numero,coordenadas){
+		self.borrar(coordenadas)
+		self.agregar(numero,coordenadas)
+	}
+	
+	method estaLleno() = casilleros.values().all{numero => numero != 0}
 	
 }
 
 object puntaje {
-	method position() = game.at(2,5)
-	method image() = "assets/label.png"
-	method text() = "Puntajes " + juego.puntajes()
+	method position() = game.at(2,6)
+//	method image() = "assets/label.png"
+	method text() = "Puntos: " + juego.puntajes()
 	method textColor() = "FFFFFF"
 }
 
 object movimiento {
-	method position() = game.at(4,5)
-	method image() = "assets/label.png"
-	method text() = "Movimientos " + juego.movimientos()
+	method position() = game.at(4,6)
+//	method image() = "assets/label.png"
+	method text() = "Movimientos: " + juego.movimientos()
 	method textColor() = "FFFFFF"
 }
 
-object estado { // NO FUNCIONA
-	const estadoLista = [
-		juego.estaOcupado(1,1),
-		juego.estaOcupado(1,2),
-		juego.estaOcupado(1,3),
-		juego.estaOcupado(1,4),
-		
-		juego.estaOcupado(2,1),
-		juego.estaOcupado(2,2),
-		juego.estaOcupado(2,3),
-		juego.estaOcupado(2,4),
-		
-		juego.estaOcupado(3,1),
-		juego.estaOcupado(3,2),
-		juego.estaOcupado(3,3),
-		juego.estaOcupado(3,4),
-		
-		juego.estaOcupado(4,1),
-		juego.estaOcupado(4,2),
-		juego.estaOcupado(4,3),
-		juego.estaOcupado(4,4)
-	]
-	method estado(){
-		return estadoLista
-	}  
-	
-	method estadoTodoOcupado(){
-		return estadoLista.all({ elemento => elemento == true })
-	}
+//object estado { // NO FUNCIONA
+//	const estadoLista = [
+//		juego.estaOcupado(1,1),
+//		juego.estaOcupado(1,2),
+//		juego.estaOcupado(1,3),
+//		juego.estaOcupado(1,4),
+//		
+//		juego.estaOcupado(2,1),
+//		juego.estaOcupado(2,2),
+//		juego.estaOcupado(2,3),
+//		juego.estaOcupado(2,4),
+//		
+//		juego.estaOcupado(3,1),
+//		juego.estaOcupado(3,2),
+//		juego.estaOcupado(3,3),
+//		juego.estaOcupado(3,4),
+//		
+//		juego.estaOcupado(4,1),
+//		juego.estaOcupado(4,2),
+//		juego.estaOcupado(4,3),
+//		juego.estaOcupado(4,4)
+//	]
+//	method estado(){
+//		return estadoLista
+//	}  
+//	
+//	method estadoTodoOcupado(){
+//		return estadoLista.all({ elemento => elemento == true })
+//	}
+//
+//}
 
-}
