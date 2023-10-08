@@ -52,27 +52,17 @@ object juego {
 		
 		game.start()
 		
-		/*	Bugs detectados:
+		/*	Hay que arreglar:
 		 * 
-		 * 	Si se llena el tablero, el juego deja de funcionar porque se agotan los "intentos"
-		 * 	que agregarNumero hace cuando añade numeros nuevos. Hay que buscar otra forma de
-		 *  poner esa logica para que detecte sin entrar en un bucle infinito que no hay mas 
-		 *  espacio en el tablero. Esto es un bug porque puede ser que el tablero esté lleno
-		 *  y con un movimiento a cualquier direccion se abran nuevos espacios, entonces deberia
-		 * 	dejarlo abierto hasta que ya no haya mas posibilidades de juntar nuevos bloques en
-		 * 	ninguna dirección, y ahi es cuando deberia salir la pantalla del game over.
+		 * El objeto tablero tiene un diccionario que lleva el registro de todas las posiciones ocupadas
+		 * en el juego. actualmente solo las agrega pero cuando mueve de lugar y fusiona no las libera
+		 * entonces cuando ese tablero se llena, aparece el game over. Que en realidad tampoco es game over.
+		 * Hay que crear una logica que verifique si cuando el tablero esta lleno, aun hay movimientos disponibles
+		 * para moverse en cualquier dirección. Si hay al menos un numero disponible para mover, no es game over.
+		 * El game over tiene que aparecer cuando ya no es posible mover más numeros y tampoco es posible fusionar.
 		 * 
 		 */
-		 
-		 /*	Falta por hacer:
-		  * 
-		  * Implementar puntajes en pantalla ✔
-		  * Implementar boton de reiniciar juego
-		  * Implementar cantidad de movimientos ✔
-		  * Implementar pantalla de ganador ✔
-		  * Agregar musica? ✔
-		  * 
-		  */	
+		 	
 	}
 	
 	method hacerConfiguracionInicial() {
