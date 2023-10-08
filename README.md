@@ -1,7 +1,6 @@
 # Grupo Kirin
-## Juego
-2048
-## Integrantes: 
+Juego 2048
+## Integrantes
 - Francisco Ou Su
 - Zoe Yusti
 - Kenzo Grosvald
