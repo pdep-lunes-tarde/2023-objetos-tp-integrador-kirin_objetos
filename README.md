@@ -1,12 +1,7 @@
-# Grupo
-
-# Nombre
-Kirin_Objetos
-# Juego
+# Grupo Kirin
+## Juego
 2048
-
-Integrantes: 
-
+## Integrantes: 
 - Francisco Ou Su
 - Zoe Yusti
 - Kenzo Grosvald
