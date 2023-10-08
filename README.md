@@ -26,6 +26,12 @@ Boton derecho sobre `juego.wpgm > Run as > Wollok Program`.
 Van a haber varios checkpoints presenciales en los cuales vamos a ver el estado del tp, dar correcciones y junto con ustedes decidir en qué continuar trabajando.
 Los checkpoints presenciales están en la página: https://www.pdep.com.ar/cursos/lunes-tarde
 
+# Parte práctica
+
+## Cosas faltantes:
+- [ ] Implementar lógica de ganador cuando llega a 2048
+- [ ] Arreglar el sistema que chequea si hay movimientos faltantes disponibles cuando el tablero está lleno
+
 # Parte teórica
 
 Les vamos a ir dando preguntas para cada checkpoint que **tienen que** dejar contestadas por escrito. Pueden directamente editar este README.md con sus respuestas:
