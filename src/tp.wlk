@@ -36,6 +36,66 @@ class Numero {
 	method image() = "assets/" + numero + ".png"
 }
 
+object tablero{
+
+	const casilleros = new Dictionary()
+	
+	method casilleros() = casilleros
+	
+	method init(){
+		
+		/*
+		
+		 a Dictionary [
+		 "1x1" -> 0, "1x2" -> 0, "1x3" -> 0, "1x4" -> 0,
+		 "2x1" -> 0, "2x2" -> 0, "2x3" -> 0, "2x4" -> 0,
+		 "3x1" -> 0, "3x2" -> 0, "3x3" -> 0, "3x4" -> 0,
+		 "4x1" -> 0, "4x2" -> 0, "4x3" -> 0, "4x4" -> 0]
+		 
+		*/
+		
+		self.addNumero(0,1,1)
+		self.addNumero(0,2,1)
+		self.addNumero(0,3,1)
+		self.addNumero(0,4,1)
+		
+		self.addNumero(0,1,2)
+		self.addNumero(0,2,2)
+		self.addNumero(0,3,2)
+		self.addNumero(0,4,2)
+		
+		self.addNumero(0,1,3)
+		self.addNumero(0,2,3)
+		self.addNumero(0,3,3)
+		self.addNumero(0,4,3)
+		
+		self.addNumero(0,1,4)
+		self.addNumero(0,2,4)
+		self.addNumero(0,3,4)
+		self.addNumero(0,4,4)
+
+	}
+	
+	method addNumero(numero,ejeX,ejeY){
+		casilleros.put(self.armarEje(ejeX,ejeY),numero)
+	}
+	
+	method armarEje(ejeX,ejeY){
+		return ejeX.toString() + "x" + ejeY.toString()
+	}
+	
+	method getNumero(ejeX,ejeY) = casilleros.get(self.armarEje(ejeX,ejeY))
+
+	method borrar(coordenada){
+		casilleros.put(coordenada,0)
+	}
+	
+	method buscar(coordenada) = casilleros.basicGet(coordenada)
+	
+	method estaLleno() = casilleros.values().all{numero => numero != 0}
+	
+}
+
 object juego {
 	
 	const property numeros = []
@@ -43,7 +103,7 @@ object juego {
 	var puntajes
 	var movimientos
 	var musica
-	var volumen = 0.5
+	const volumen = 0.5
 			
 	method iniciar() {	
 		
@@ -51,17 +111,6 @@ object juego {
 		self.configurarTeclas()
 		
 		game.start()
-		
-		/*	Hay que arreglar:
-		 * 
-		 * El objeto tablero tiene un diccionario que lleva el registro de todas las posiciones ocupadas
-		 * en el juego. actualmente solo las agrega pero cuando mueve de lugar y fusiona no las libera
-		 * entonces cuando ese tablero se llena, aparece el game over. Que en realidad tampoco es game over.
-		 * Hay que crear una logica que verifique si cuando el tablero esta lleno, aun hay movimientos disponibles
-		 * para moverse en cualquier dirección. Si hay al menos un numero disponible para mover, no es game over.
-		 * El game over tiene que aparecer cuando ya no es posible mover más numeros y tampoco es posible fusionar.
-		 * 
-		 */
 		 	
 	}
 	
@@ -144,7 +193,9 @@ object juego {
 					
 					referencia = new Numero(numero=2,position=ejeRandom)
 					numeros.add(referencia)
+					
 					tablero.addNumero(referencia,referencia.positionX(),referencia.positionY())
+					
 					game.addVisual(referencia)
 					
 				} else {
@@ -153,16 +204,16 @@ object juego {
 				 
 			} else {
 				
-				console.println("Game over. Perdiste.")
-				self.perder()
-				// Aca hay que invocar a la pantalla de perdedor
+				if (!self.movimientosPosibles()) {
+            		console.println("Game over. Perdiste.")
+            		self.perder()
+            }
 		}
 	}
 	
 	method eje_random() = game.at(new Range(start = 1, end = 4).anyOne(),new Range(start = 1, end = 4).anyOne())
 	
-	// Solo para troubleshooting
-	method agregarNumeroEn(cual,x,y){		
+	method agregarNumeroEn(cual,x,y){ // Solo para troubleshooting	
 		referencia = new Numero(numero=cual,position=game.at(x,y))
 		numeros.add(referencia)
 		game.addVisual(referencia)	
@@ -180,9 +231,6 @@ object juego {
 		const y = numero.positionY()
 		var casilleros
 	
-		// Vuelvo la coordenada actual a cero, porque se va a mover
-//		tablero.borrar(tablero.hacerCoordenada(x,y))
-	
 		if (direccion == "derecha") {
 	  		casilleros = 4 - x
 		} else if (direccion == "izquierda") {
@@ -199,75 +247,114 @@ object juego {
 			
 			if (direccion == "derecha" && x < 4) {
 		  		if (!self.estaOcupado(x + 1, y)) {
-		  		
-		    		numero.derecha(1)
-//		    		tablero.addNumero(numero,numero.positionX(),numero.positionY())
-		    		
+
+					tablero.borrar(tablero.armarEje(x,y))
+					
+		    		numero.derecha(1)		    		
 		    		numero.movimientosFaltantes(-1)
+		    		
+		    		tablero.addNumero(numero, numero.positionX(), numero.positionY())
+		    		
 		    		self.moverNumero(numero, direccion)
 		    		
 		  		} else {
+		  			
 		  			const numero_a_la_derecha = self.getNumeroEn(x+1,y)
 		  			
 		  			if (numero.numero() == numero_a_la_derecha.numero()){
+		  				
 		  				self.fusionarNumeros(numero,numero_a_la_derecha)
+		  				
 		  				self.moverNumero(numero, direccion)
+		  				
 		  			} else {
+		  				
 		  				numero.movimientosFaltantes(0)
+		  				
 		  			}
 		  		}
 		  		
 			} else if (direccion == "izquierda" && x > 1) {
+				
 				if (!self.estaOcupado(x - 1, y)) {
 					
-					numero.izquierda(1)
+					tablero.borrar(tablero.armarEje(x,y))
 					
+					numero.izquierda(1)
 					numero.movimientosFaltantes(-1)
+					
+					tablero.addNumero(numero, numero.positionX(), numero.positionY())
+					
 					self.moverNumero(numero, direccion)
+					
 				} else {
+					
 					const numero_a_la_izquierda = self.getNumeroEn(x-1,y)
+					
 		  			if (numero.numero() == numero_a_la_izquierda.numero()){
+		  				
 		  				self.fusionarNumeros(numero,numero_a_la_izquierda)
 		  				self.moverNumero(numero, direccion)
+		  				
 		  			} else {
+		  				
 		  				numero.movimientosFaltantes(0)
 		  			}
 		  		}
 		  		
 	  		} else if (direccion == "arriba" && y < 4) {
+	  			
 				if (!self.estaOcupado(x, y + 1) ) {
 					
+					tablero.borrar(tablero.armarEje(x,y))
+					
 		  			numero.arriba(1)
-		  			
 		  			numero.movimientosFaltantes(-1)
+		  			
+		  			tablero.addNumero(numero, numero.positionX(), numero.positionY())
+		  			
 		  			self.moverNumero(numero, direccion)
+		  			
 				} else {
+					
 					const numero_arriba = self.getNumeroEn(x,y+1)
+					
 		  			if (numero.numero() == numero_arriba.numero()) {
+		  				
 		  				self.fusionarNumeros(numero,numero_arriba)
 		  				self.moverNumero(numero, direccion)
+		  				
 		  			} else {
+		  				
 		  				numero.movimientosFaltantes(0)
+		  				
 		  			}
 		  		}
 			} else if (direccion == "abajo" && y > 1) {
 		  		if (!self.estaOcupado(x, y - 1)) {
 		  			
-//		  			tablero.borrar(game.at(x,y))
+		  			tablero.borrar(tablero.armarEje(x,y))
 		  			
 		    		numero.abajo(1)
-		    		
-//		    		tablero.agregar(numero,game.at(numero.positionX(),numero.positionY()))
-		    		
 		    		numero.movimientosFaltantes(-1)
+		    		
+		    		tablero.addNumero(numero, numero.positionX(), numero.positionY())
+		    		
 		    		self.moverNumero(numero, direccion)
+		    		
 		  		}  else {
+		  			
 		  			const numero_abajo = self.getNumeroEn(x,y-1)
+		  			
 		  			if (numero.numero() == self.getNumeroEn(x,y-1).numero()){
+		  				
 		  				self.fusionarNumeros(numero,numero_abajo)
 		  				self.moverNumero(numero, direccion)
+		  				
 		  			} else {
+		  				
 		  				numero.movimientosFaltantes(0)
+		  			
 		  			}
 		  		}
 			}
@@ -285,16 +372,14 @@ object juego {
 	        	puntajes += numero1.numero()
 	        	numero1.image()
 	        	
-//	        	tablero.borrar(numero1.position())
-//	        	tablero.borrar(numero2.position())
 	        	
-//	        	tablero.agregar(numero1,game.at(numero1.positionX(),numero1.positionY()))
-	        	
+	        	tablero.borrar(tablero.armarEje(numero2.positionX(),numero2.positionY()))
 	        	game.removeVisual(numero2)
 	        	
-	        self.numeros().remove(numero2)
+	       		self.numeros().remove(numero2)
 	    	} 
 		} else {
+			if (!self.movimientosPosibles())
 			self.perder()
 		}
 	}
@@ -319,79 +404,33 @@ object juego {
 		game.addVisual(pantallaPerder)
 	}
 	
-}
-
-object tablero{
-
-	const casilleros = new Dictionary()
-	
-	method casilleros() = casilleros
-	
-	method init(){
-		
-		/*
-		
-		 a Dictionary [
-		 "1x1" -> 0, "1x2" -> 0, "1x3" -> 0, "1x4" -> 0,
-		 "2x1" -> 0, "2x2" -> 0, "2x3" -> 0, "2x4" -> 0,
-		 "3x1" -> 0, "3x2" -> 0, "3x3" -> 0, "3x4" -> 0,
-		 "4x1" -> 0, "4x2" -> 0, "4x3" -> 0, "4x4" -> 0]
-		 
-		*/
-		
-		self.addNumero(0,1,1)
-		self.addNumero(0,2,1)
-		self.addNumero(0,3,1)
-		self.addNumero(0,4,1)
-		
-		self.addNumero(0,1,2)
-		self.addNumero(0,2,2)
-		self.addNumero(0,3,2)
-		self.addNumero(0,4,2)
-		
-		self.addNumero(0,1,3)
-		self.addNumero(0,2,3)
-		self.addNumero(0,3,3)
-		self.addNumero(0,4,3)
-		
-		self.addNumero(0,1,4)
-		self.addNumero(0,2,4)
-		self.addNumero(0,3,4)
-		self.addNumero(0,4,4)
-
+	method movimientosPosibles(){
+    return self.movimientosPosiblesEnDireccion("arriba") or
+           self.movimientosPosiblesEnDireccion("abajo") or
+           self.movimientosPosiblesEnDireccion("izquierda") or
+           self.movimientosPosiblesEnDireccion("derecha")
 	}
-	
-	method addNumero(numero,ejeX,ejeY){
-		casilleros.put(self.hacerCoordenada(ejeX,ejeY),numero)
-	}
-	
-	method hacerCoordenada(ejeX,ejeY){
-		return ejeX.toString() + "x" + ejeY.toString()
-	}
-	
-	method getNumero(ejeX,ejeY) = casilleros.get(self.hacerCoordenada(ejeX,ejeY))
 
-	method borrar(coordenada){
-		self.addNumero(0,coordenada.x(),coordenada.x())
+	method movimientosPosiblesEnDireccion(direccion) {
+   		self.ordenarNumeros(direccion)
+    	const numerosAntes = self.numeros()
+    	numerosAntes.forEach({ numero => self.moverNumero(numero, direccion) })
+    	const numerosDespues = self.numeros()
+    	return numerosAntes != numerosDespues
 	}
-	
-	method buscar(coordenada) = casilleros.get(coordenada)
-	
-	method estaLleno() = casilleros.values().all{numero => numero != 0}
 	
 }
-
 
 object pantallaPuntaje {
 	method position() = game.at(2,6)
-//	method image() = "assets/label.png"
+	method image() = "assets/label.png"
 	method text() = "Puntos: " + juego.puntajes()
 	method textColor() = "FFFFFF"
 }
 
 object pantallaMovimiento {
 	method position() = game.at(4,6)
-//	method image() = "assets/label.png"
+	method image() = "assets/label.png"
 	method text() = "Movimientos: " + juego.movimientos()
 	method textColor() = "FFFFFF"
 }
