@@ -104,6 +104,7 @@ object juego {
 	var movimientos
 	var musica
 	const volumen = 0.5
+	var terminado = false
 			
 	method iniciar() {	
 		
@@ -145,29 +146,41 @@ object juego {
 	method configurarTeclas() {
 		
 		keyboard.up().onPressDo{
-			self.ordenarNumeros("arriba")
-			self.numeros().forEach({num => self.moverNumero(num, "arriba")})
-			self.agregarNumero()
-			movimientos += 1
+			if(!terminado){
+				self.ordenarNumeros("arriba")
+				self.numeros().forEach({num => self.moverNumero(num, "arriba")})
+				self.agregarNumero()
+				movimientos += 1	
+				self.numeros().forEach({numero => self.chequearGanador(numero)})		
+			}
 		}
 		
 		keyboard.down().onPressDo{
-			self.ordenarNumeros("abajo")
-			self.numeros().forEach({num => self.moverNumero(num, "abajo")})
-			self.agregarNumero()
-			movimientos += 1
+			if(!terminado){
+				self.ordenarNumeros("abajo")
+				self.numeros().forEach({num => self.moverNumero(num, "abajo")})
+				self.agregarNumero()
+				movimientos += 1
+				self.numeros().forEach({numero => self.chequearGanador(numero)})
+			}
 		}
 		keyboard.left().onPressDo{
-			self.ordenarNumeros("izquierda")
-			self.numeros().forEach({num => self.moverNumero(num, "izquierda")})
-			self.agregarNumero()
-			movimientos += 1
+			if(!terminado){
+				self.ordenarNumeros("izquierda")
+				self.numeros().forEach({num => self.moverNumero(num, "izquierda")})
+				self.agregarNumero()
+				movimientos += 1
+				self.numeros().forEach({numero => self.chequearGanador(numero)})
+			}
 		}
 		keyboard.right().onPressDo{
-			self.ordenarNumeros("derecha")
-			self.numeros().forEach({num => self.moverNumero(num, "derecha")})
-			self.agregarNumero()
-			movimientos += 1
+			if(!terminado){
+				self.ordenarNumeros("derecha")
+				self.numeros().forEach({num => self.moverNumero(num, "derecha")})
+				self.agregarNumero()
+				movimientos += 1
+				self.numeros().forEach({numero => self.chequearGanador(numero)})			
+			}
 		}
 		
 //		keyboard.r().onPressDo{
@@ -368,7 +381,7 @@ object juego {
 		
 //		if (!self.movimientosPosibles()) {
             console.println("Game over. Perdiste.")
-            self.perder()
+            self.terminar(pantallaPerder)
 //		}
 	}
 }
@@ -390,10 +403,11 @@ object juego {
 	        	
 	       		self.numeros().remove(numero2)
 	    	} 
+	    	
 		} 
 		else {
 			if (!self.movimientosPosibles())
-			self.perder()
+			self.terminar(pantallaPerder)
 		}
 	}
 
@@ -412,10 +426,11 @@ object juego {
 		game.schedule(100, {musica.play()})
 	}
 	
-	method perder(){
+	method terminar(visual){
 		self.musica().stop()
-		game.addVisual(pantallaPerder)	
-		game.stop()
+		game.addVisual(visual)	
+		terminado = true
+		//game.stop()
 	}
 	
 	method movimientosPosibles(){
@@ -445,6 +460,13 @@ object juego {
     	return numerosAntes != numerosDespues
 	}
 	
+	method chequearGanador(numero){
+		if(numero.numero() == 2048){
+			self.terminar(pantallaGanar)
+			
+		}
+	}
+	
 }
 
 object pantallaPuntaje {
@@ -464,4 +486,9 @@ object pantallaMovimiento {
 object pantallaPerder {
 	method position() = game.at(0,0)
 	method image() = "assets/gameOver.png"
+}
+
+object pantallaGanar {
+	method position() = game.at(0,2)
+	method image() = "assets/ganaste.png"
 }
