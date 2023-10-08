@@ -110,6 +110,14 @@ object juego {
 		self.hacerConfiguracionInicial()
 		self.configurarTeclas()
 		
+		
+		/*
+		 * Bug: los primeros dos numeros pueden llegar a caer en la misma coordenada y sumarse, por lo que
+		 * al abrir el juego te encontras directamente un 4 y nada más
+		 * 
+		 * 
+		 */
+		
 		game.start()
 		 	
 	}
@@ -202,14 +210,8 @@ object juego {
 					self.agregarNumero()
 				}
 				 
-			} else {
-				
-				if (!self.movimientosPosibles()) {
-            		console.println("Game over. Perdiste.")
-            		self.perder()
             }
 		}
-	}
 	
 	method eje_random() = game.at(new Range(start = 1, end = 4).anyOne(),new Range(start = 1, end = 4).anyOne())
 	
@@ -243,124 +245,134 @@ object juego {
 	
 		numero.movimientosFaltantes(casilleros)
 		
-		if(numero.movimientosFaltantes() > 0) {
-			
-			if (direccion == "derecha" && x < 4) {
-		  		if (!self.estaOcupado(x + 1, y)) {
-
-					tablero.borrar(tablero.armarEje(x,y))
-					
-		    		numero.derecha(1)		    		
-		    		numero.movimientosFaltantes(-1)
-		    		
-		    		tablero.addNumero(numero, numero.positionX(), numero.positionY())
-		    		
-		    		self.moverNumero(numero, direccion)
-		    		
-		  		} else {
-		  			
-		  			const numero_a_la_derecha = self.getNumeroEn(x+1,y)
-		  			
-		  			if (numero.numero() == numero_a_la_derecha.numero()){
-		  				
-		  				self.fusionarNumeros(numero,numero_a_la_derecha)
-		  				
-		  				self.moverNumero(numero, direccion)
-		  				
-		  			} else {
-		  				
-		  				numero.movimientosFaltantes(0)
-		  				
-		  			}
-		  		}
-		  		
-			} else if (direccion == "izquierda" && x > 1) {
+		if(!tablero.estaLleno()){ // esto despues hay que cambiarlo para que primero revise si hay movimientos disponibles
+		
+			if(numero.movimientosFaltantes() > 0) {
 				
-				if (!self.estaOcupado(x - 1, y)) {
+				if (direccion == "derecha" && x < 4) {
+			  		if (!self.estaOcupado(x + 1, y)) {
+	
+						tablero.borrar(tablero.armarEje(x,y))
+						
+			    		numero.derecha(1)		    		
+			    		numero.movimientosFaltantes(-1)
+			    		
+			    		tablero.addNumero(numero, numero.positionX(), numero.positionY())
+			    		
+			    		self.moverNumero(numero, direccion)
+			    		
+			  		} else {
+			  			
+			  			const numero_a_la_derecha = self.getNumeroEn(x+1,y)
+			  			
+			  			if (numero.numero() == numero_a_la_derecha.numero()){
+			  				
+			  				self.fusionarNumeros(numero,numero_a_la_derecha)
+			  				
+			  				self.moverNumero(numero, direccion)
+			  				
+			  			} else {
+			  				
+			  				numero.movimientosFaltantes(0)
+			  				
+			  			}
+			  		}
+			  		
+				} else if (direccion == "izquierda" && x > 1) {
 					
-					tablero.borrar(tablero.armarEje(x,y))
-					
-					numero.izquierda(1)
-					numero.movimientosFaltantes(-1)
-					
-					tablero.addNumero(numero, numero.positionX(), numero.positionY())
-					
-					self.moverNumero(numero, direccion)
-					
-				} else {
-					
-					const numero_a_la_izquierda = self.getNumeroEn(x-1,y)
-					
-		  			if (numero.numero() == numero_a_la_izquierda.numero()){
-		  				
-		  				self.fusionarNumeros(numero,numero_a_la_izquierda)
-		  				self.moverNumero(numero, direccion)
-		  				
-		  			} else {
-		  				
-		  				numero.movimientosFaltantes(0)
-		  			}
-		  		}
-		  		
-	  		} else if (direccion == "arriba" && y < 4) {
-	  			
-				if (!self.estaOcupado(x, y + 1) ) {
-					
-					tablero.borrar(tablero.armarEje(x,y))
-					
-		  			numero.arriba(1)
-		  			numero.movimientosFaltantes(-1)
+					if (!self.estaOcupado(x - 1, y)) {
+						
+						tablero.borrar(tablero.armarEje(x,y))
+						
+						numero.izquierda(1)
+						numero.movimientosFaltantes(-1)
+						
+						tablero.addNumero(numero, numero.positionX(), numero.positionY())
+						
+						self.moverNumero(numero, direccion)
+						
+					} else {
+						
+						const numero_a_la_izquierda = self.getNumeroEn(x-1,y)
+						
+			  			if (numero.numero() == numero_a_la_izquierda.numero()){
+			  				
+			  				self.fusionarNumeros(numero,numero_a_la_izquierda)
+			  				self.moverNumero(numero, direccion)
+			  				
+			  			} else {
+			  				
+			  				numero.movimientosFaltantes(0)
+			  			}
+			  		}
+			  		
+		  		} else if (direccion == "arriba" && y < 4) {
 		  			
-		  			tablero.addNumero(numero, numero.positionX(), numero.positionY())
-		  			
-		  			self.moverNumero(numero, direccion)
-		  			
-				} else {
-					
-					const numero_arriba = self.getNumeroEn(x,y+1)
-					
-		  			if (numero.numero() == numero_arriba.numero()) {
-		  				
-		  				self.fusionarNumeros(numero,numero_arriba)
-		  				self.moverNumero(numero, direccion)
-		  				
-		  			} else {
-		  				
-		  				numero.movimientosFaltantes(0)
-		  				
-		  			}
-		  		}
-			} else if (direccion == "abajo" && y > 1) {
-		  		if (!self.estaOcupado(x, y - 1)) {
-		  			
-		  			tablero.borrar(tablero.armarEje(x,y))
-		  			
-		    		numero.abajo(1)
-		    		numero.movimientosFaltantes(-1)
-		    		
-		    		tablero.addNumero(numero, numero.positionX(), numero.positionY())
-		    		
-		    		self.moverNumero(numero, direccion)
-		    		
-		  		}  else {
-		  			
-		  			const numero_abajo = self.getNumeroEn(x,y-1)
-		  			
-		  			if (numero.numero() == self.getNumeroEn(x,y-1).numero()){
-		  				
-		  				self.fusionarNumeros(numero,numero_abajo)
-		  				self.moverNumero(numero, direccion)
-		  				
-		  			} else {
-		  				
-		  				numero.movimientosFaltantes(0)
-		  			
-		  			}
-		  		}
+					if (!self.estaOcupado(x, y + 1) ) {
+						
+						tablero.borrar(tablero.armarEje(x,y))
+						
+			  			numero.arriba(1)
+			  			numero.movimientosFaltantes(-1)
+			  			
+			  			tablero.addNumero(numero, numero.positionX(), numero.positionY())
+			  			
+			  			self.moverNumero(numero, direccion)
+			  			
+					} else {
+						
+						const numero_arriba = self.getNumeroEn(x,y+1)
+						
+			  			if (numero.numero() == numero_arriba.numero()) {
+			  				
+			  				self.fusionarNumeros(numero,numero_arriba)
+			  				self.moverNumero(numero, direccion)
+			  				
+			  			} else {
+			  				
+			  				numero.movimientosFaltantes(0)
+			  				
+			  			}
+			  		}
+				} else if (direccion == "abajo" && y > 1) {
+			  		if (!self.estaOcupado(x, y - 1)) {
+			  			
+			  			tablero.borrar(tablero.armarEje(x,y))
+			  			
+			    		numero.abajo(1)
+			    		numero.movimientosFaltantes(-1)
+			    		
+			    		tablero.addNumero(numero, numero.positionX(), numero.positionY())
+			    		
+			    		self.moverNumero(numero, direccion)
+			    		
+			  		}  else {
+			  			
+			  			const numero_abajo = self.getNumeroEn(x,y-1)
+			  			
+			  			if (numero.numero() == self.getNumeroEn(x,y-1).numero()){
+			  				
+			  				self.fusionarNumeros(numero,numero_abajo)
+			  				self.moverNumero(numero, direccion)
+			  				
+			  			} else {
+			  				
+			  				numero.movimientosFaltantes(0)
+			  			
+			  			}
+			  		}
+				}
 			}
-		}
-
+	
+	} else {
+		
+//		if (!self.movimientosPosibles()) {
+            console.println("Game over. Perdiste.")
+            self.perder()
+//		}
 	}
+}
+	
 	
 	method fusionarNumeros(numero1, numero2) {
 		
@@ -378,7 +390,8 @@ object juego {
 	        	
 	       		self.numeros().remove(numero2)
 	    	} 
-		} else {
+		} 
+		else {
 			if (!self.movimientosPosibles())
 			self.perder()
 		}
@@ -399,23 +412,36 @@ object juego {
 		game.schedule(100, {musica.play()})
 	}
 	
-	method perder() {
+	method perder(){
 		self.musica().stop()
-		game.addVisual(pantallaPerder)
+		game.addVisual(pantallaPerder)	
+		game.stop()
 	}
 	
 	method movimientosPosibles(){
-    return self.movimientosPosiblesEnDireccion("arriba") or
-           self.movimientosPosiblesEnDireccion("abajo") or
-           self.movimientosPosiblesEnDireccion("izquierda") or
-           self.movimientosPosiblesEnDireccion("derecha")
+    	if(self.movimientosPosiblesEnDireccion("arriba"))
+    		return true
+    	else if(self.movimientosPosiblesEnDireccion("abajo"))
+    		return true
+    	else if(self.movimientosPosiblesEnDireccion("izquierda"))
+    		return true
+    	else return self.movimientosPosiblesEnDireccion("derecha")
+           
 	}
 
 	method movimientosPosiblesEnDireccion(direccion) {
+		const numerosAntes = new List()
+		const numerosDespues = new List()
+		
+		numeros.forEach{numero=>
+			numerosAntes.add(numero)
+			numerosDespues.add(numero)
+		}
+				
    		self.ordenarNumeros(direccion)
-    	const numerosAntes = self.numeros()
-    	numerosAntes.forEach({ numero => self.moverNumero(numero, direccion) })
-    	const numerosDespues = self.numeros()
+
+    	numerosDespues.forEach({ numero => self.moverNumero(numero, direccion) })
+    	
     	return numerosAntes != numerosDespues
 	}
 	
