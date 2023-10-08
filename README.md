@@ -1,13 +1,9 @@
-# Grupo
-
-Nombre: Kirin_Objetos
-Juego: 2048
-
-Integrantes: 
-
-	- Francisco Ou Su
-	- Zoe Yusti
-	- Kenzo Grosvald
+# Grupo Kirin
+Juego 2048
+## Integrantes
+- Francisco Ou Su
+- Zoe Yusti
+- Kenzo Grosvald
 
 # Consigna TP Integrador
 
@@ -25,6 +21,14 @@ Boton derecho sobre `juego.wpgm > Run as > Wollok Program`.
 
 Van a haber varios checkpoints presenciales en los cuales vamos a ver el estado del tp, dar correcciones y junto con ustedes decidir en qué continuar trabajando.
 Los checkpoints presenciales están en la página: https://www.pdep.com.ar/cursos/lunes-tarde
+
+# Parte práctica
+
+## Cosas faltantes:
+- [ ] Implementar lógica de ganador cuando llega a 2048
+- [ ] Arreglar el sistema que chequea si hay movimientos faltantes disponibles cuando el tablero está lleno
+- [ ] Agregar tests
+- [ ] Agregar herencia
 
 # Parte teórica
 
