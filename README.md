@@ -25,7 +25,7 @@ Los checkpoints presenciales están en la página: https://www.pdep.com.ar/curso
 # Parte práctica
 
 ## Cosas faltantes:
-- [ ] Implementar lógica de ganador cuando llega a 2048
+- [x] Implementar lógica de ganador cuando llega a 2048
 - [ ] Arreglar el sistema que chequea si hay movimientos faltantes disponibles cuando el tablero está lleno
 - [ ] Agregar tests
 - [ ] Agregar herencia
