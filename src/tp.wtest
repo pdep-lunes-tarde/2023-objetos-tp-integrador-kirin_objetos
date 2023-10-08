@@ -1,13 +1,14 @@
 import tp.*
 
 describe "Agregar número" {
-	test "agregar un número 2 en posicion (2, 2)." {	
+	
+	test "Agregar un numero al tablero devuelve ese casillero ocupado." {	
 			juego.agregarNumeroEn(2,2,2)
 			
 			assert.that(juego.estaOcupado(2,2))
 	}
 	
-	test "agregar dos números 2 en posicion (2, 2) y (3,3)." {	
+	test "Agregar dos números al tablero devuelve esos dos casilleros ocupados." {	
 			juego.agregarNumeroEn(2,2,2)
 			juego.agregarNumeroEn(2,3,3)
 			
@@ -16,9 +17,9 @@ describe "Agregar número" {
 	}
 }
 
-describe "Mover número " {
-	test "mover un número al borde superior"{
-			
-	}
-	
-}
+//describe "Mover número " {
+//	test "mover un número al borde superior"{
+//		juego.agregarNumeroEn(2,2,2)
+//	}
+//	
+//}
