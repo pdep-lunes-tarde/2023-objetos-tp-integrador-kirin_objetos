@@ -111,14 +111,6 @@ object juego {
 		self.hacerConfiguracionInicial()
 		self.configurarTeclas()
 		
-		
-		/*
-		 * Bug: los primeros dos numeros pueden llegar a caer en la misma coordenada y sumarse, por lo que
-		 * al abrir el juego te encontras directamente un 4 y nada más
-		 * 
-		 * 
-		 */
-		
 		game.start()
 		 	
 	}
@@ -206,27 +198,26 @@ object juego {
 	
 	method agregarNumero(){
 		
-		const ejeRandom = self.eje_random()
-		
 		if(!tablero.estaLleno()){
-			
-				if (!self.estaOcupado(ejeRandom)){
-					
-					referencia = new Numero(numero=2,position=ejeRandom)
-					numeros.add(referencia)
-					
-					tablero.addNumero(referencia,referencia.positionX(),referencia.positionY())
-					
-					game.addVisual(referencia)
-					
-				} else {
-					self.agregarNumero()
-				}
-				 
-            }
-		}
 	
-	method eje_random() = game.at(new Range(start = 1, end = 4).anyOne(),new Range(start = 1, end = 4).anyOne())
+			referencia = new Numero(numero=2,position=self.eje_random())
+			numeros.add(referencia)
+			tablero.addNumero(referencia,referencia.positionX(),referencia.positionY())
+			game.addVisual(referencia)
+			
+		}    
+	}
+	
+	method eje_random() {
+		
+		const x = new Range(start = 1, end = 4).anyOne()
+		const y = new Range(start = 1, end = 4).anyOne()
+		
+		if(!self.estaOcupado(x,y))
+			return game.at(x,y)
+		else
+			return self.eje_random()	
+	}
 	
 	method agregarNumeroEn(cual,x,y){ // Solo para troubleshooting	
 		referencia = new Numero(numero=cual,position=game.at(x,y))
