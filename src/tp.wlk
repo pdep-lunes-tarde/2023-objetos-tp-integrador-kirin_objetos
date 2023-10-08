@@ -191,7 +191,7 @@ object juego {
 		var casilleros
 	
 		// Vuelvo la coordenada actual a cero, porque se va a mover
-		tablero.borrar(tablero.hacerCoordenada(x,y))
+//		tablero.borrar(tablero.hacerCoordenada(x,y))
 	
 		if (direccion == "derecha") {
 	  		casilleros = 4 - x
