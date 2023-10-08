@@ -43,7 +43,7 @@ object juego {
 	var puntajes
 	var movimientos
 	var musica
-	var volumen = 0.2
+	var volumen = 0.5
 			
 	method iniciar() {	
 		
@@ -114,7 +114,7 @@ object juego {
 		}
 		
 //		keyboard.r().onPressDo{
-//			self.perdiste()
+//			self.perder()
 //			game.clear()
 //			self.iniciar()
 //		}
@@ -154,7 +154,7 @@ object juego {
 			} else {
 				
 				console.println("Game over. Perdiste.")
-				self.perdiste()
+				self.perder()
 				// Aca hay que invocar a la pantalla de perdedor
 		}
 	}
@@ -294,6 +294,8 @@ object juego {
 	        	
 	        self.numeros().remove(numero2)
 	    	} 
+		} else {
+			self.perder()
 		}
 	}
 
@@ -312,9 +314,9 @@ object juego {
 		game.schedule(100, {musica.play()})
 	}
 	
-	method perdiste() {
-		game.schedule(800, {self.musica().stop()})
-		game.schedule(1000, {game.addVisual(pantallaPerder)})
+	method perder() {
+		self.musica().stop()
+		game.addVisual(pantallaPerder)
 	}
 	
 }
