@@ -104,7 +104,7 @@ object juego {
 	var movimientos
 	var musica
 	const volumen = 0.5
-	var terminado = false
+	var property terminado = false
 			
 	method iniciar() {	
 		
@@ -135,6 +135,7 @@ object juego {
 		
 		puntajes = 0
 		movimientos = 0
+		self.terminado(false)
 		
 		tablero.init()
 			
