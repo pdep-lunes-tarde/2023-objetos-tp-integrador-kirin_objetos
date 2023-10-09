@@ -105,7 +105,6 @@ object juego {
 	var referencia
 	var puntajes
 	var musica
-	var movimientosFallidos = 0 
 			
 	method iniciar() {	
 		
