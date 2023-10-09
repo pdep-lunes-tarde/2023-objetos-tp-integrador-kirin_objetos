@@ -175,11 +175,26 @@ object juego {
 			}
 		}
 		
-//		keyboard.r().onPressDo{
-//			self.perder()
-//			game.clear()
-//			self.iniciar()
-//		}
+//			keyboard.r().onPressDo{
+//				
+//				self.numeros().forEach({num =>
+//					numeros.remove(num)
+//					game.removeVisual(num)
+//				})
+//				
+//				game.removeVisual(pantallaPuntaje)
+//				game.removeVisual(pantallaMovimiento)
+//				
+//				if(game.hasVisual(pantallaGanar)){
+//					game.removeVisual(pantallaGanar)
+//				} 
+//				if(game.hasVisual(pantallaPerder)){
+//					game.removeVisual(pantallaPerder)
+//				}
+//				
+//				self.iniciar()
+//			}
+		
 
 	}
 	
