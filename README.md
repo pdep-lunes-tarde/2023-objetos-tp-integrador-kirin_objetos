@@ -33,6 +33,8 @@ Los checkpoints presenciales están en la página: https://www.pdep.com.ar/curso
 ## Bugs detectados
 - [ ] Cuando pierde, se agrega la pantalla de perdedor dos veces y da un error por consola, y aparece un cartel dentro del tablero.
 ![image](https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/ef40f15a-a3bd-47dd-80d9-42cefab415e1)
+![image](https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/cf2fb101-d6e0-48dc-aa3f-60c37c374bf1)
+
 
 
 # Parte teórica
