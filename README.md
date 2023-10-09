@@ -29,7 +29,7 @@ Los checkpoints presenciales están en la página: https://www.pdep.com.ar/curso
 - [ ] Arreglar el sistema que chequea si hay movimientos faltantes disponibles cuando el tablero está lleno
 - [ ] Agregar tests
 - [ ] Agregar herencia
-- [ ] Agregar reinicio de juego con boton
+- [ ] Arreglar reinicio de juego con boton
 
 ## Bugs detectados
 - [ ] Cuando pierde, se agrega la pantalla de perdedor dos veces y da un error por consola, y aparece un cartel dentro del tablero.
