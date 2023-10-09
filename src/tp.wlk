@@ -205,7 +205,9 @@ object juego {
 			tablero.addNumero(referencia,referencia.positionX(),referencia.positionY())
 			game.addVisual(referencia)
 			
-		}    
+		}   else {
+			 self.terminar(pantallaPerder)
+		} 
 	}
 	
 	method eje_random() {
@@ -368,11 +370,11 @@ object juego {
 				}
 			}
 	
-	} else {
+//	} else {
 		
 //		if (!self.movimientosPosibles()) {
-            console.println("Game over. Perdiste.")
-            self.terminar(pantallaPerder)
+//            console.println("Game over. Perdiste.")
+//            self.terminar(pantallaPerder)
 //		}
 	}
 }
@@ -396,10 +398,10 @@ object juego {
 	    	} 
 	    	
 		} 
-		else {
-			if (!self.movimientosPosibles())
-			self.terminar(pantallaPerder)
-		}
+//		else {
+//			if (!self.movimientosPosibles())
+//			self.terminar(pantallaPerder)
+//		}
 	}
 
 	method getNumeroEn(x, y) = game.getObjectsIn(game.at(x,y)).head()
