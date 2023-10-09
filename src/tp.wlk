@@ -108,6 +108,8 @@ object juego {
 			
 	method iniciar() {	
 		
+		
+		self.initBasico()
 		self.hacerConfiguracionInicial()
 		self.configurarTeclas()
 		
@@ -115,16 +117,21 @@ object juego {
 		 	
 	}
 	
-	method hacerConfiguracionInicial() {
-		
+	method initBasico(){
 		game.width(6)
 		game.height(7)
 		game.cellSize(100)
 		game.title("2048")
 		game.boardGround("assets/fondo.png")
+		self.iniciarMusica("assets/sleepTight.mp3")
+	}
+	
+	method hacerConfiguracionInicial() {
+		
+		
 		game.addVisual(pantallaPuntaje)
 		game.addVisual(pantallaMovimiento)
-		self.iniciarMusica("assets/sleepTight.mp3")
+		
 		
 		puntajes = 0
 		movimientos = 0
@@ -135,65 +142,50 @@ object juego {
 		self.agregarNumero()
 	}
 	
+	method tecla(direccion){
+		if(!terminado){
+			self.ordenarNumeros(direccion)
+			self.numeros().forEach({num => self.moverNumero(num, direccion)})
+			self.agregarNumero()
+			movimientos += 1	
+			self.numeros().forEach({numero => self.chequearGanador(numero)})
+		}
+	}
 	method configurarTeclas() {
 		
 		keyboard.up().onPressDo{
-			if(!terminado){
-				self.ordenarNumeros("arriba")
-				self.numeros().forEach({num => self.moverNumero(num, "arriba")})
-				self.agregarNumero()
-				movimientos += 1	
-				self.numeros().forEach({numero => self.chequearGanador(numero)})		
-			}
+			self.tecla("arriba")
 		}
 		
 		keyboard.down().onPressDo{
-			if(!terminado){
-				self.ordenarNumeros("abajo")
-				self.numeros().forEach({num => self.moverNumero(num, "abajo")})
-				self.agregarNumero()
-				movimientos += 1
-				self.numeros().forEach({numero => self.chequearGanador(numero)})
-			}
+			self.tecla("abajo")
 		}
 		keyboard.left().onPressDo{
-			if(!terminado){
-				self.ordenarNumeros("izquierda")
-				self.numeros().forEach({num => self.moverNumero(num, "izquierda")})
-				self.agregarNumero()
-				movimientos += 1
-				self.numeros().forEach({numero => self.chequearGanador(numero)})
-			}
+			self.tecla("izquierda")
 		}
 		keyboard.right().onPressDo{
-			if(!terminado){
-				self.ordenarNumeros("derecha")
-				self.numeros().forEach({num => self.moverNumero(num, "derecha")})
-				self.agregarNumero()
-				movimientos += 1
-				self.numeros().forEach({numero => self.chequearGanador(numero)})			
-			}
+			self.tecla("derecha")
 		}
 		
-//			keyboard.r().onPressDo{
-//				
-//				self.numeros().forEach({num =>
-//					numeros.remove(num)
-//					game.removeVisual(num)
-//				})
-//				
-//				game.removeVisual(pantallaPuntaje)
-//				game.removeVisual(pantallaMovimiento)
-//				
-//				if(game.hasVisual(pantallaGanar)){
-//					game.removeVisual(pantallaGanar)
-//				} 
-//				if(game.hasVisual(pantallaPerder)){
-//					game.removeVisual(pantallaPerder)
-//				}
-//				
-//				self.iniciar()
-//			}
+		keyboard.r().onPressDo{
+			
+			self.numeros().forEach{num =>
+				numeros.remove(num)
+				game.removeVisual(num)
+			}
+		
+			game.removeVisual(pantallaPuntaje)
+			game.removeVisual(pantallaMovimiento)
+			
+			if(game.hasVisual(pantallaGanar)){
+				game.removeVisual(pantallaGanar)
+			} 
+			if(game.hasVisual(pantallaPerder)){
+				game.removeVisual(pantallaPerder)
+			}
+			
+			self.hacerConfiguracionInicial()
+		}
 		
 
 	}
