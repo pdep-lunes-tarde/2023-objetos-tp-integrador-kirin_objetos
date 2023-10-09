@@ -431,25 +431,6 @@ object juego {
 		terminado = true
 	}
 	
-	method movimientosPosibles(){
-    	return self.sePuedeMoverEn("arriba") or self.sePuedeMoverEn("abajo") or self.sePuedeMoverEn("izquierda") or self.sePuedeMoverEn("derecha")
-	}
-
-	method sePuedeMoverEn(direccion) {
-		
-		const numerosAntes = numeros.copy()
-		const numerosDespues = numeros.copy()
-				
-   		self.ordenarLista(direccion,numerosAntes)
-   		self.ordenarLista(direccion,numerosDespues)
-
-    	numerosDespues.forEach({ numero =>
-    		self.moverNumero(numero, direccion)
-    	})
-    	
-    	return numerosAntes != numerosDespues
-	}
-	
 	method chequearGanador(numero){
 		if(numero.numero() == 2048){
 			self.terminar(pantallaGanar)
