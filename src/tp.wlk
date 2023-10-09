@@ -461,25 +461,25 @@ object juego {
 }
 
 object pantallaPuntaje {
-	method position() = game.at(2,6)
-	method image() = "assets/label.png"
-	method text() = "Puntos: " + juego.puntajes()
-	method textColor() = "FFFFFF"
+	method position() = game.at(5,6)
+//	method image() = "assets/label.png"
+	method text() = "" + juego.puntajes()
+	method textColor() = "766e65"
 }
 
 object pantallaMovimiento {
 	method position() = game.at(4,6)
-	method image() = "assets/label.png"
-	method text() = "Movimientos: " + juego.movimientos()
-	method textColor() = "FFFFFF"
+//	method image() = "assets/label.png"
+	method text() = "" + juego.movimientos()
+	method textColor() = "766e65"
 }
 
 object pantallaPerder {
 	method position() = game.at(0,0)
-	method image() = "assets/gameOver.png"
+	method image() = "assets/perdiste.png"
 }
 
 object pantallaGanar {
-	method position() = game.at(0,2)
+	method position() = game.at(0,0)
 	method image() = "assets/ganaste.png"
 }
