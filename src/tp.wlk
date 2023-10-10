@@ -231,7 +231,11 @@ object juego {
 			numeros.add(referencia)
 			tablero.addNumero(referencia,referencia.positionX(),referencia.positionY())
 			game.addVisual(referencia)
-		} 
+		} else {
+			if(!self.numeros().any({num=>self.sePuedeMover(num)})){
+				self.terminar(pantallaPerder)
+			}
+		}
 	 
 	}
 	
@@ -265,6 +269,10 @@ object juego {
 	    const movimientosRestantes = self.calcularCasillerosRestantes(numero, direccion)
 	
 	    if (movimientosRestantes > 0) {
+	    	
+//	    	if(!numeros.any({num=>self.sePuedeMover(num)})){
+//				 self.terminar(pantallaPerder)
+//			}
 	    	
 	        const nuevoX = x + self.calcularIncrementoX(direccion)
 	        const nuevoY = y + self.calcularIncrementoY(direccion)
@@ -323,6 +331,65 @@ object juego {
 	    } else {
 	        return 0
 	    }
+	}
+
+	method sePuedeMover(numero){
+    	return self.movimientoValido(numero, "derecha") or self.movimientoValido(numero, "izquierda") or self.movimientoValido(numero, "abajo") or self.movimientoValido(numero, "arriba")
+	}
+
+	method movimientoValido(numero, direccion) {
+	    const x = numero.positionX()
+	    const y = numero.positionY()
+	
+	    var numeroEnNuevaPosicion
+	
+	    if (direccion == "derecha" && x < 4 ){
+	    
+	     	if(self.estaOcupado(x + 1, y)){
+	        	numeroEnNuevaPosicion = self.getNumeroEn(x + 1, y)
+	        	
+	        	return numero.numero() == numeroEnNuevaPosicion.numero()
+	        	
+	        } else {
+	        	return true
+	        }
+	        
+	    } else if (direccion == "izquierda" && x > 1 ){
+	    
+			if(self.estaOcupado(x - 1, y)){
+	        	numeroEnNuevaPosicion = self.getNumeroEn(x - 1, y)
+	        	
+	        	return numero.numero() == numeroEnNuevaPosicion.numero()
+	        	
+	        } else {
+	        	return true
+	        }     
+	        
+	    } else if (direccion == "abajo" && y > 1 ){
+	    	
+			if(self.estaOcupado(x, y-1)){
+		        	numeroEnNuevaPosicion = self.getNumeroEn(x, y-1)
+		        	
+		        	return numero.numero() == numeroEnNuevaPosicion.numero()
+		        } else {
+		        	return true
+		    }
+		
+	    } else if (direccion == "arriba" && y < 4 ){
+	    	
+			if(self.estaOcupado(x, y+1)){
+		        	numeroEnNuevaPosicion = self.getNumeroEn(x, y+1)
+		        	
+		        	return numero.numero() == numeroEnNuevaPosicion.numero()
+		        } else {
+		        	return true
+		    }
+	        
+	    } 
+	
+	return false
+//	    return numero.numero() == numeroEnNuevaPosicion.numero() 
+//	    or !self.estaOcupado(numeroEnNuevaPosicion.positionX(), numeroEnNuevaPosicion.positionY())
 	}
 
 	method fusionarNumeros(numero1, numero2) {
