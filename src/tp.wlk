@@ -101,9 +101,9 @@ object juego {
 	var property terminado = false
 	const property numeros = new List()
 	const volumen = 0.5
-	var movimientos
+	var movimientos = 0
 	var referencia
-	var puntajes
+	var puntajes = 0
 	var musica
 			
 	method iniciar() {	
@@ -163,8 +163,7 @@ object juego {
 		
 		keyboard.up().onPressDo{
 			self.tecla("arriba")
-		}
-		
+		}	
 		keyboard.down().onPressDo{
 			self.tecla("abajo")
 		}
@@ -174,28 +173,33 @@ object juego {
 		keyboard.right().onPressDo{
 			self.tecla("derecha")
 		}
-		
+	}
+	
+	method configurarTeclaR() {
 		keyboard.r().onPressDo{
+			self.reiniciar()
+		}	
+	}
 			
-			self.numeros().forEach{num =>
-				numeros.remove(num)
-				game.removeVisual(num)
-			}
-		
-			game.removeVisual(pantallaPuntaje)
-			game.removeVisual(pantallaMovimiento)
-			
-			if(game.hasVisual(pantallaGanar)){
-				game.removeVisual(pantallaGanar)
-			} 
-			if(game.hasVisual(pantallaPerder)){
-				game.removeVisual(pantallaPerder)
-			}
-			
-			self.hacerConfiguracionInicial()
+	method reiniciar(){
+		self.musica().stop()
+		self.numeros().forEach{num =>
+			numeros.remove(num)
+			game.removeVisual(num)
 		}
-		
-
+				
+		game.removeVisual(pantallaPuntaje)
+		game.removeVisual(pantallaMovimiento)
+			
+		if(game.hasVisual(pantallaGanar)){
+			game.removeVisual(pantallaGanar)
+		} 
+		if(game.hasVisual(pantallaPerder)){
+			game.removeVisual(pantallaPerder)
+		}
+			
+		self.hacerConfiguracionInicial()
+		self.iniciarMusica("assets/sleepTight.mp3")
 	}
 	
 	method ordenarNumeros(direccion) {
@@ -380,27 +384,25 @@ object juego {
 	method terminar(visual){
 		game.addVisual(visual)	
 		terminado = true
+		self.configurarTeclaR()
 	}
 	
 	method chequearGanador(numero){
 		if(numero.numero() == 2048){
 			self.terminar(pantallaGanar)
-			
+			self.configurarTeclaR()
 		}
-	}
-	
+	}	
 }
 
 object pantallaPuntaje {
 	method position() = game.at(5,6)
-//	method image() = "assets/label.png"
 	method text() = "" + juego.puntajes()
 	method textColor() = "766e65"
 }
 
 object pantallaMovimiento {
 	method position() = game.at(4,6)
-//	method image() = "assets/label.png"
 	method text() = "" + juego.movimientos()
 	method textColor() = "766e65"
 }

@@ -1,25 +1,122 @@
 import tp.*
+import wollok.game.*
 
-describe "Agregar número" {
+describe "El tablero" {
 	
-	test "Agregar un numero al tablero devuelve ese casillero ocupado." {	
-			juego.agregarNumeroEn(2,2,2)
-			
-			assert.that(juego.estaOcupado(2,2))
+	test "El tablero está lleno." {
+		assert.that(tablero.estaLleno())
 	}
 	
-	test "Agregar dos números al tablero devuelve esos dos casilleros ocupados." {	
-			juego.agregarNumeroEn(2,2,2)
-			juego.agregarNumeroEn(2,3,3)
+}
+		
+describe "Agregar número al tablero." {
+		
+	test "Agregar un numero al tablero devuelve ese casillero ocupado." {
+		juego.agregarNumeroEn(2,2,2)
 			
-			assert.that(juego.estaOcupado(2,2))
-			assert.that(juego.estaOcupado(3,3))
+		assert.that(juego.estaOcupado(2,2))
+	}
+	
+	test "Agregar dos números al tablero devuelve esos dos casilleros ocupados." {
+		juego.agregarNumeroEn(2,2,2)
+		juego.agregarNumeroEn(2,3,3)
+			
+		assert.that(juego.estaOcupado(2,2))
+		assert.that(juego.estaOcupado(3,3))
 	}
 }
 
-//describe "Mover número " {
-//	test "mover un número al borde superior"{
-//		juego.agregarNumeroEn(2,2,2)
-//	}
-//	
-//}
+describe "Mover número" {
+		
+	test "Mover un número al borde superior."{
+		juego.agregarNumeroEn(2,2,2)
+		juego.tecla("arriba")
+		
+		assert.that(juego.estaOcupado(2,4))
+	}
+	test "Mover un número al borde inferior."{
+		juego.agregarNumeroEn(2,2,2)
+		juego.tecla("abajo")
+		
+		assert.that(juego.estaOcupado(2,1))
+	}
+	test "Mover un número al borde izquierdo."{
+		juego.agregarNumeroEn(2,2,2)
+		juego.tecla("izquierda")
+		
+		assert.that(juego.estaOcupado(1,2))
+	}
+	test "Mover un número al borde derecho."{
+		juego.agregarNumeroEn(2,2,2)
+		juego.tecla("derecha")
+		
+		assert.that(juego.estaOcupado(4,2))
+	}
+	
+	test "Mover dos números al borde superior."{
+		juego.agregarNumeroEn(2,2,2)
+		juego.agregarNumeroEn(2,3,3)
+		juego.tecla("arriba")
+		
+		assert.that(juego.estaOcupado(2,4))
+		assert.that(juego.estaOcupado(3,4))
+	}
+	
+	test "Mover dos números al borde inferior."{
+		juego.agregarNumeroEn(2,2,2)
+		juego.agregarNumeroEn(2,3,3)
+		juego.tecla("abajo")
+		
+		assert.that(juego.estaOcupado(2,1))
+		assert.that(juego.estaOcupado(3,1))
+	}
+	
+	test "Mover dos números al borde izquierdo."{	
+		juego.agregarNumeroEn(2,2,2)
+		juego.agregarNumeroEn(2,3,3)
+		juego.tecla("izquierda")
+		
+		assert.that(juego.estaOcupado(1,2))
+		assert.that(juego.estaOcupado(1,3))
+	}
+	
+	test "Mover dos números al borde derecho."{		
+		juego.agregarNumeroEn(2,2,2)
+		juego.agregarNumeroEn(2,3,3)
+		juego.tecla("derecha")
+		
+		assert.that(juego.estaOcupado(4,2))
+		assert.that(juego.estaOcupado(4,3))
+	}
+	
+}
+
+describe "Fusiona dos números" {
+
+	test "Mover dos números al borde superior y fusiona." {
+		const numeroEnNuevaPosicion = juego.getNumeroEn(2, 4)
+		
+		juego.agregarNumeroEn(2,2,2)
+		juego.agregarNumeroEn(2,2,4)
+		juego.tecla("arriba")
+			
+		assert.that(juego.estaOcupado(2,4))
+		assert.equals(4, numeroEnNuevaPosicion.numero())
+	}	
+}
+
+describe "Resultados del juego" {
+	
+	test "Gnar el juego." {
+		juego.terminar(pantallaGanar)
+		
+		assert.that(game.hasVisual(pantallaGanar))
+	}
+	
+	test "Perder el juego." {
+		juego.terminar(pantallaPerder)
+		
+		assert.that(game.hasVisual(pantallaPerder))
+	}
+	
+}
