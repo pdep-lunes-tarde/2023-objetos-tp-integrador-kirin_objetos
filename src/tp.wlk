@@ -378,7 +378,6 @@ object juego {
 	}
 	
 	method terminar(visual){
-		self.musica().stop()
 		game.addVisual(visual)	
 		terminado = true
 	}
