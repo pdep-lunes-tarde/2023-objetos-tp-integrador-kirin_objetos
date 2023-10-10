@@ -24,9 +24,9 @@ Los checkpoints presenciales están en la página: https://www.pdep.com.ar/curso
 
 # Parte práctica
 
-## Features faltantes:
+## Tareas faltantes:
 
-- Arreglar el sistema que chequea si hay movimientos faltantes disponibles cuando el tablero está lleno, y en base a eso termina el juego
+- Agregar tests
 
 # Parte teórica
 
