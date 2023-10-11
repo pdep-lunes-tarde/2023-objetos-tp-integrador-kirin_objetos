@@ -152,13 +152,13 @@ object juego {
 			
 			self.ordenarNumeros(direccion)
 			self.numeros().forEach({num => self.moverNumero(num, direccion)})
-			
-			self.numeros().forEach({numero => self.chequearGanador(numero)})
-			
+						
 			self.agregarNumero()
 			
 			movimientos += 1
 			self.chequearPuntaje(puntajes)
+			
+			self.numeros().forEach({numero => self.chequearGanador(numero)})
 			
 			if(!game.hasVisual(pantallaGanar)){
 				self.chequearPerdedor()	
