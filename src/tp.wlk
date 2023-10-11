@@ -159,6 +159,10 @@ object juego {
 			
 			movimientos += 1
 			self.chequearPuntaje(puntajes)
+			
+			if(!game.hasVisual(pantallaGanar)){
+				self.chequearPerdedor()	
+			} 
 		}
 	}
 	
@@ -226,10 +230,7 @@ object juego {
 			numeros.add(referencia)
 			tablero.addNumero(referencia,referencia.positionX(),referencia.positionY())
 			game.addVisual(referencia)
-		} else {
-			if(!self.numeros().any({num=>self.sePuedeMover(num)})){
-				self.terminar(pantallaPerder)
-			}
+
 		}
 	 
 	}
@@ -398,6 +399,12 @@ object juego {
 			self.terminar(pantallaGanar)
 			self.configurarTeclaR()
 		}
+	}
+	
+	method chequearPerdedor(){
+		if(tablero.estaLleno() && !self.numeros().any({num=>self.sePuedeMover(num)})){
+				self.terminar(pantallaPerder)
+			}
 	}
 	
 	method chequearPuntaje(numero) {
