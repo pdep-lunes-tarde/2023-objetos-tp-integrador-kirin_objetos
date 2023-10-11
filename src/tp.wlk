@@ -413,13 +413,13 @@ object juego {
 	}
 }
 object pantallaPuntajeMasAlta {
-	method position() = game.at(4,6)
+	method position() = game.at(5,6)
 	method text() = "" + juego.puntajesMasAlta()
 	method textColor() = "766e65"
 }
 
 object pantallaPuntaje {
-	method position() = game.at(5,6)
+	method position() = game.at(4,6)
 	method text() = "" + juego.puntajes()
 	method textColor() = "766e65"
 }
