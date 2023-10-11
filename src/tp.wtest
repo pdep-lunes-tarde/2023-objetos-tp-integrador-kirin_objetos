@@ -108,9 +108,14 @@ describe "Fusiona dos números" {
 describe "Resultados del juego" {
 	
 	test "Gnar el juego." {
-		juego.terminar(pantallaGanar)
+		const numeroEnNuevaPosicion = juego.getNumeroEn(2, 4)
 		
-		assert.that(game.hasVisual(pantallaGanar))
+		juego.agregarNumeroEn(1024,2,1)
+		juego.agregarNumeroEn(1024,2,3)
+		juego.tecla("arriba")
+			
+		assert.that(juego.estaOcupado(2,4))
+		assert.equals(2048, numeroEnNuevaPosicion.numero())
 	}
 	
 	test "Perder el juego." {

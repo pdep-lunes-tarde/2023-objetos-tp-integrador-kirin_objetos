@@ -104,6 +104,7 @@ object juego {
 	var movimientos = 0
 	var referencia
 	var puntajes = 0
+	var puntajesMasAlta = 0
 	var musica
 			
 	method iniciar() {	
@@ -132,6 +133,7 @@ object juego {
 		
 		game.addVisual(pantallaPuntaje)
 		game.addVisual(pantallaMovimiento)
+		game.addVisual(pantallaPuntajeMasAlta)
 		
 		
 		puntajes = 0
@@ -156,6 +158,7 @@ object juego {
 			self.agregarNumero()
 			
 			movimientos += 1
+			self.chequearPuntaje(puntajes)
 		}
 	}
 	
@@ -182,7 +185,7 @@ object juego {
 	}
 			
 	method reiniciar(){
-		self.musica().stop()
+		musica.stop()
 		self.numeros().forEach{num =>
 			numeros.remove(num)
 			game.removeVisual(num)
@@ -190,6 +193,7 @@ object juego {
 				
 		game.removeVisual(pantallaPuntaje)
 		game.removeVisual(pantallaMovimiento)
+		game.removeVisual(pantallaPuntajeMasAlta)
 			
 		if(game.hasVisual(pantallaGanar)){
 			game.removeVisual(pantallaGanar)
@@ -370,6 +374,8 @@ object juego {
 	
 	method puntajes() = puntajes
 	
+	method puntajesMasAlta() = puntajesMasAlta
+	
 	method movimientos() = movimientos
 	
 	method musica() = musica
@@ -392,7 +398,18 @@ object juego {
 			self.terminar(pantallaGanar)
 			self.configurarTeclaR()
 		}
-	}	
+	}
+	
+	method chequearPuntaje(numero) {
+		if(numero >= puntajesMasAlta){
+			puntajesMasAlta = numero
+		}
+	}
+}
+object pantallaPuntajeMasAlta {
+	method position() = game.at(4,6)
+	method text() = "" + juego.puntajesMasAlta()
+	method textColor() = "766e65"
 }
 
 object pantallaPuntaje {
@@ -402,7 +419,7 @@ object pantallaPuntaje {
 }
 
 object pantallaMovimiento {
-	method position() = game.at(4,6)
+	method position() = game.at(3,6)
 	method text() = "" + juego.movimientos()
 	method textColor() = "766e65"
 }
