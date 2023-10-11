@@ -100,12 +100,10 @@ object juego {
 	
 	var property terminado = false
 	const property numeros = new List()
-	const volumen = 0.5
 	var movimientos = 0
 	var referencia
 	var puntajes = 0
 	var puntajesMasAlta = 0
-	var musica
 			
 	method iniciar() {	
 		
@@ -124,7 +122,6 @@ object juego {
 		game.cellSize(100)
 		game.title("2048")
 		game.boardGround("assets/fondo.png")
-		self.iniciarMusica("assets/sleepTight.mp3")
 		
 	}
 	
@@ -189,25 +186,19 @@ object juego {
 	}
 			
 	method reiniciar(){
-		musica.stop()
-		self.numeros().forEach{num =>
+		if(game.hasVisual(pantallaPerder)){
+			self.numeros().forEach{num =>
 			numeros.remove(num)
 			game.removeVisual(num)
-		}
+			}
 				
-		game.removeVisual(pantallaPuntaje)
-		game.removeVisual(pantallaMovimiento)
-		game.removeVisual(pantallaPuntajeMasAlta)
-			
-		if(game.hasVisual(pantallaGanar)){
-			game.removeVisual(pantallaGanar)
-		} 
-		if(game.hasVisual(pantallaPerder)){
+			game.removeVisual(pantallaPuntaje)
+			game.removeVisual(pantallaMovimiento)
+			game.removeVisual(pantallaPuntajeMasAlta)
 			game.removeVisual(pantallaPerder)
-		}
 			
-		self.hacerConfiguracionInicial()
-		self.iniciarMusica("assets/sleepTight.mp3")
+			self.hacerConfiguracionInicial()
+		}
 	}
 	
 	method ordenarNumeros(direccion) {
@@ -377,21 +368,11 @@ object juego {
 	
 	method puntajesMasAlta() = puntajesMasAlta
 	
-	method movimientos() = movimientos
-	
-	method musica() = musica
-	
-	method iniciarMusica(music) {
-		musica = game.sound(music)
-		musica.shouldLoop(true)
-		musica.volume(volumen)
-		game.schedule(100, {musica.play()})
-	}
+	method movimientos() = movimientos	
 	
 	method terminar(visual){
 		game.addVisual(visual)	
 		terminado = true
-		self.configurarTeclaR()
 	}
 	
 	method chequearGanador(numero){
@@ -403,7 +384,9 @@ object juego {
 	method chequearPerdedor(){
 		if(tablero.estaLleno() && !self.numeros().any({num=>self.sePuedeMover(num)})){
 			self.terminar(pantallaPerder)
+			self.configurarTeclaR()
 		}
+		
 	}
 	
 	method chequearPuntaje(numero) {
