@@ -177,12 +177,9 @@ object juego {
 		keyboard.right().onPressDo{
 			self.tecla("derecha")
 		}
-	}
-	
-	method configurarTeclaR() {
 		keyboard.r().onPressDo{
 			self.reiniciar()
-		}	
+		}
 	}
 			
 	method reiniciar(){
@@ -196,6 +193,19 @@ object juego {
 			game.removeVisual(pantallaMovimiento)
 			game.removeVisual(pantallaPuntajeMasAlta)
 			game.removeVisual(pantallaPerder)
+			
+			self.hacerConfiguracionInicial()
+		}
+		if(game.hasVisual(pantallaGanar)){
+			self.numeros().forEach{num =>
+			numeros.remove(num)
+			game.removeVisual(num)
+			}
+				
+			game.removeVisual(pantallaPuntaje)
+			game.removeVisual(pantallaMovimiento)
+			game.removeVisual(pantallaPuntajeMasAlta)
+			game.removeVisual(pantallaGanar)
 			
 			self.hacerConfiguracionInicial()
 		}
@@ -384,7 +394,6 @@ object juego {
 	method chequearPerdedor(){
 		if(tablero.estaLleno() && !self.numeros().any({num=>self.sePuedeMover(num)})){
 			self.terminar(pantallaPerder)
-			self.configurarTeclaR()
 		}
 		
 	}
