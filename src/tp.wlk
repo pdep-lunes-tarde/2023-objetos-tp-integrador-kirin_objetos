@@ -397,14 +397,13 @@ object juego {
 	method chequearGanador(numero){
 		if(numero.numero() == 2048){
 			self.terminar(pantallaGanar)
-			self.configurarTeclaR()
 		}
 	}
 	
 	method chequearPerdedor(){
 		if(tablero.estaLleno() && !self.numeros().any({num=>self.sePuedeMover(num)})){
-				self.terminar(pantallaPerder)
-			}
+			self.terminar(pantallaPerder)
+		}
 	}
 	
 	method chequearPuntaje(numero) {
