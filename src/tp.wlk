@@ -103,14 +103,12 @@ object juego {
 	var movimientos = 0
 	var referencia
 	var puntajes = 0
-	var puntajesMasAlta = 0
+	var puntajeMasAlto = 0
 			
 	method iniciar() {	
-		
 		self.initBasico()
 		self.hacerConfiguracionInicial()
 		self.configurarTeclas()
-		
 		game.start()
 		 	
 	}
@@ -122,17 +120,14 @@ object juego {
 		game.cellSize(100)
 		game.title("2048")
 		game.boardGround("assets/fondo.png")
-		
-	}
-	
-	method hacerConfiguracionInicial() {
-		
-		
 		game.addVisual(pantallaPuntaje)
 		game.addVisual(pantallaMovimiento)
 		game.addVisual(pantallaPuntajeMasAlta)
 		
-		
+	}
+	
+	method hacerConfiguracionInicial() {
+
 		puntajes = 0
 		movimientos = 0
 		
@@ -165,49 +160,37 @@ object juego {
 	
 	method configurarTeclas() {
 		
-		keyboard.up().onPressDo{
-			self.tecla("arriba")
-		}	
-		keyboard.down().onPressDo{
-			self.tecla("abajo")
-		}
-		keyboard.left().onPressDo{
-			self.tecla("izquierda")
-		}
-		keyboard.right().onPressDo{
-			self.tecla("derecha")
-		}
-		keyboard.r().onPressDo{
-			self.reiniciar()
-		}
+		keyboard.up().onPressDo{ self.tecla("arriba") }
+			
+		keyboard.down().onPressDo{ self.tecla("abajo") }
+		
+		keyboard.left().onPressDo{ self.tecla("izquierda") }
+		
+		keyboard.right().onPressDo{ self.tecla("derecha") }
+		
+		keyboard.r().onPressDo{ self.reiniciar() }
+		
 	}
 			
 	method reiniciar(){
-		if(game.hasVisual(pantallaPerder)){
-			self.numeros().forEach{num =>
-			numeros.remove(num)
-			game.removeVisual(num)
+		
+		if(game.hasVisual(pantallaPerder) or game.hasVisual(pantallaGanar)){
+		
+			self.numeros().forEach{numero =>
+				numeros.remove(numero)
+				game.removeVisual(numero)
 			}
-				
-			game.removeVisual(pantallaPuntaje)
-			game.removeVisual(pantallaMovimiento)
-			game.removeVisual(pantallaPuntajeMasAlta)
-			game.removeVisual(pantallaPerder)
+			
+			if(game.hasVisual(pantallaPerder)){
+				game.removeVisual(pantallaPerder)
+			}
+			
+			if(game.hasVisual(pantallaGanar)){
+				game.removeVisual(pantallaGanar)
+			}
 			
 			self.hacerConfiguracionInicial()
-		}
-		if(game.hasVisual(pantallaGanar)){
-			self.numeros().forEach{num =>
-			numeros.remove(num)
-			game.removeVisual(num)
-			}
-				
-			game.removeVisual(pantallaPuntaje)
-			game.removeVisual(pantallaMovimiento)
-			game.removeVisual(pantallaPuntajeMasAlta)
-			game.removeVisual(pantallaGanar)
-			
-			self.hacerConfiguracionInicial()
+		
 		}
 	}
 	
@@ -376,7 +359,7 @@ object juego {
 	
 	method puntajes() = puntajes
 	
-	method puntajesMasAlta() = puntajesMasAlta
+	method puntajeMasAlto() = puntajeMasAlto
 	
 	method movimientos() = movimientos	
 	
@@ -392,21 +375,22 @@ object juego {
 	}
 	
 	method chequearPerdedor(){
-		if(tablero.estaLleno() && !self.numeros().any({num=>self.sePuedeMover(num)})){
+		if(tablero.estaLleno() && !self.numeros().any({numero=>self.sePuedeMover(numero)})){
 			self.terminar(pantallaPerder)
 		}
 		
 	}
 	
 	method chequearPuntaje(numero) {
-		if(numero >= puntajesMasAlta){
-			puntajesMasAlta = numero
+		if(numero >= puntajeMasAlto){
+			puntajeMasAlto = numero
 		}
 	}
 }
+
 object pantallaPuntajeMasAlta {
 	method position() = game.at(5,6)
-	method text() = "" + juego.puntajesMasAlta()
+	method text() = "" + juego.puntajeMasAlto()
 	method textColor() = "766e65"
 }
 
