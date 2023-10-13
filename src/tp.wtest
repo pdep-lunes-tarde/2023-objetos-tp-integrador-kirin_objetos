@@ -113,7 +113,7 @@ describe "Mover número" {
 	
 }
 
-describe "Fusión de números" {
+describe "Fusionar numeros" {
 
 	test "Mover dos números al borde superior debería fusionarlos si tienen el mismo valor." {
 		juego.agregarNumeroEn(2, 1, 3)
@@ -123,12 +123,10 @@ describe "Fusión de números" {
 	}	
 }
 
-describe "Resultados del juego" {
+describe "Ganar el juego" {
 	
 	test "El juego se gana al tener presente el número 2048 en el tablero." {
-		juego.agregarNumeroEn(1024, 1, 3)
-		juego.agregarNumeroEn(1024, 1, 4)
-		juego.tecla("arriba")
-		assert.equals(2048, juego.getNumeroEn(1, 4).numero())
+		juego.agregarNumeroEn(2048, 1, 1)
+		assert.equals(2048, juego.getNumeroEn(1, 1).numero())
 	}
 }
