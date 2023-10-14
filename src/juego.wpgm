@@ -1,4 +1,4 @@
-import tp.*
+import juego.*
 
 program juego {
 	juego.iniciar()

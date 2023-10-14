@@ -1,4 +1,6 @@
-import tp.*
+import juego.*
+import pantallas.*
+
 import wollok.game.*
 
 //describe "El tablero" {
