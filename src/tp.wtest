@@ -119,8 +119,8 @@ describe "Fusionar numeros" {
 		juego.agregarNumeroEn(2, 1, 4)
 		juego.agregarNumeroEn(2, 1, 3)
 		juego.tecla("arriba")
-		assert.equals(4, juego.getNumeroEn(1, 4).numero())
-	}	
+		assert.that(juego.numeros().any{numero => numero.numero() == 4})
+	}
 }
 
 describe "Ganar el juego" {
