@@ -68,24 +68,31 @@ object juego {
 	}
 	
 	method tecla(direccion){
-		if(!terminado){
-			
-			self.ordenarNumeros(direccion)
-			self.numeros().forEach({num => self.moverNumero(num, direccion)})
-						
-			self.agregarNumero()
-			
-			movimientos += 1
-			self.chequearPuntaje(puntajes)
-			
-			self.numeros().forEach({numero => self.chequearGanador(numero)})
-			
-			if(!game.hasVisual(pantallaGanar)){
-				self.chequearPerdedor()	
-			} 
-		}
-	}
-	
+		
+    if(!terminado){
+        var seMovio = false
+        
+        self.ordenarNumeros(direccion)
+        
+        self.numeros().forEach { num =>
+            if(self.moverNumero(num, direccion)) {
+                seMovio = true
+            }
+        }
+        
+        if(seMovio) { 
+            self.agregarNumero()
+            movimientos += 1
+            self.chequearPuntaje(puntajes)
+            self.numeros().forEach { numero => self.chequearGanador(numero) }
+            
+            if(!game.hasVisual(pantallaGanar)){
+                self.chequearPerdedor()   
+            } 
+        }
+    }
+}
+
 	method configurarTeclas() {
 		
 		keyboard.up().onPressDo{ self.tecla("arriba") }
@@ -182,6 +189,7 @@ object juego {
 	        	
 	            numero.position(game.at(nuevoX, nuevoY))
 	            self.moverNumero(numero, direccion)
+	            return true
 	            
 	        } else {
 	        	
@@ -191,9 +199,11 @@ object juego {
 	            	
 	                self.fusionarNumeros(numero, numeroEnNuevaPosicion)
 	                self.moverNumero(numero, direccion)
+	                return true
 	            }
 	        }
-		} 
+		}
+		return false
 	}
 
 	method calcularCasillerosRestantes(numero, direccion) {
