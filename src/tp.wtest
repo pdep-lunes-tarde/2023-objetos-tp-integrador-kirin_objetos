@@ -115,7 +115,7 @@ describe "Mover número" {
 
 describe "Fusionar numeros" {
 
-	test "Mover dos números al borde superior debería fusionarlos si tienen el mismo valor." {
+	test "Mover dos números que son iguales a un borde, debería fusionarlos si tienen el mismo valor." {
 		juego.agregarNumeroEn(2, 1, 4)
 		juego.agregarNumeroEn(2, 1, 3)
 		juego.tecla("arriba")
