@@ -12,26 +12,10 @@ class Numero {
 	method movimientosFaltantes(nuevo_numero){
 		movimientosFaltantes += nuevo_numero
 	}
-	
-	method arriba(casilleros) {
- 		position = position.up(casilleros)
- 	}
- 	
-  	method abajo(casilleros) {
- 		position = position.down(casilleros)
- 	}
- 	
-  	method izquierda(casilleros) {
-    	position = position.left(casilleros)
-  	}
   	
-  	method derecha(casilleros) {
-    	position = position.right(casilleros)
-  	}
-  	
-  	method positionX() = self.position().x()
+  	method x() = self.position().x()
 	
-	method positionY() = self.position().y()
+	method y() = self.position().y()
 
 	method image() = "assets/" + numero + ".png"
 }
@@ -78,7 +62,6 @@ object juego {
 		movimientos = 0
 		
 		self.terminado(false)
-		
 			
 		self.agregarNumero()
 		self.agregarNumero()
@@ -142,29 +125,27 @@ object juego {
 	method ordenarNumeros(direccion) {
 		
 		if (direccion == "derecha") {
-	 		 numeros.sortBy{ num1,num2 => num1.positionX() > num2.positionX() }
+	 		 numeros.sortBy{ num1,num2 => num1.x() > num2.x() }
 		} else if (direccion == "izquierda") {
-			numeros.sortBy{ num1,num2 => num1.positionX() < num2.positionX() }
+			numeros.sortBy{ num1,num2 => num1.x() < num2.x() }
 		} else if (direccion == "abajo") {
-	 		numeros.sortBy{ num1,num2 => num1.positionY() < num2.positionY() }
+	 		numeros.sortBy{ num1,num2 => num1.y() < num2.y() }
 		} else if (direccion == "arriba") {
-			numeros.sortBy{ num1,num2 => num1.positionY() > num2.positionY() }
+			numeros.sortBy{ num1,num2 => num1.y() > num2.y() }
 		}
 	}
 	
 	method agregarNumero(){
 		
-		if(!self.tableroLleno()){
+		if(!self.estaLleno()){
 			referencia = new Numero(numero=2,position=self.eje_random())
 			numeros.add(referencia)
 			game.addVisual(referencia)
-
 		}
-	 
 	}
 	
 	method eje_random() {
-		
+	
 		const x = new Range(start = 1, end = 4).anyOne()
 		const y = new Range(start = 1, end = 4).anyOne()
 		
@@ -188,8 +169,8 @@ object juego {
 	
 	method moverNumero(numero, direccion){
 		
-	    const x = numero.positionX()
-	    const y = numero.positionY()
+	    const x = numero.x()
+	    const y = numero.y()
 	    const movimientosRestantes = self.calcularCasillerosRestantes(numero, direccion)
 	
 	    if (movimientosRestantes > 0) {
@@ -210,15 +191,14 @@ object juego {
 	            	
 	                self.fusionarNumeros(numero, numeroEnNuevaPosicion)
 	                self.moverNumero(numero, direccion)
-	                
 	            }
 	        }
-    	} 
+    		} 
 	}
 
 	method calcularCasillerosRestantes(numero, direccion) {
-	    const x = numero.positionX()
-	    const y = numero.positionY()
+	    const x = numero.x()
+	    const y = numero.y()
 	    
 	    if (direccion == "derecha") {
 	        return 4 - x
@@ -259,8 +239,8 @@ object juego {
 	}
 
 	method movimientoValido(numero, direccion) {
-	    const x = numero.positionX()
-	    const y = numero.positionY()
+	    const x = numero.x()
+	    const y = numero.y()
 	    const movimientosRestantes = self.calcularCasillerosRestantes(numero, direccion)
 	
 	    if (movimientosRestantes <= 0) {
@@ -278,22 +258,17 @@ object juego {
 	            return true
 	        }
 	    }
-	
 	    return false
 	}
 
 	method fusionarNumeros(numero1, numero2) {
 			
 		if (numero1.numero() == numero2.numero()) {
-			
-        	numero1.numero(numero1.numero()*2)
-        	puntajes += numero1.numero()
-
-        	game.removeVisual(numero2)
- 
-       		self.numeros().remove(numero2)
-    	} 
-	    	
+	        	numero1.numero(numero1.numero()*2)
+	        	puntajes += numero1.numero()
+	        	game.removeVisual(numero2)
+	       	self.numeros().remove(numero2)
+    		}  	
 	} 
 
 	method getNumeroEn(x, y) = game.getObjectsIn(game.at(x,y)).head()
@@ -316,10 +291,9 @@ object juego {
 	}
 	
 	method chequearPerdedor(){
-		if(self.tableroLleno() && !self.numeros().any({numero=>self.sePuedeMover(numero)})){
+		if(self.estaLleno() && !self.numeros().any({numero=>self.sePuedeMover(numero)})){
 			self.terminar(pantallaPerder)
 		}
-		
 	}
 	
 	method chequearPuntaje(numero) {
@@ -328,7 +302,7 @@ object juego {
 		}
 	}
 	
-	method tableroLleno() = coordenadas.all{coordenada=>self.estaOcupado(coordenada)}
+	method estaLleno() = coordenadas.all{coordenada=>self.estaOcupado(coordenada)}
 	
 }
 
