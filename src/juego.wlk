@@ -1,6 +1,24 @@
 import wollok.game.*
-import pantallas.*
-import numero.*
+
+class Numero {
+	var property numero
+	var property position
+	var movimientosFaltantes = 0
+	
+	method numero() = numero
+	
+	method movimientosFaltantes() = movimientosFaltantes
+	
+	method movimientosFaltantes(nuevo_numero){
+		movimientosFaltantes += nuevo_numero
+	}
+  	
+  	method x() = self.position().x()
+	
+	method y() = self.position().y()
+
+	method image() = "assets/" + numero + ".png"
+}
 
 object juego {
 	
@@ -175,7 +193,7 @@ object juego {
 	                self.moverNumero(numero, direccion)
 	            }
 	        }
-    		} 
+		} 
 	}
 
 	method calcularCasillerosRestantes(numero, direccion) {
@@ -286,4 +304,32 @@ object juego {
 	
 	method estaLleno() = tablero.all{casillero=>self.estaOcupado(casillero)}
 	
+}
+
+object pantallaPuntajeMasAlta {
+	method position() = game.at(5,6)
+	method text() = "" + juego.puntajeMasAlto()
+	method textColor() = "766e65"
+}
+
+object pantallaPuntaje {
+	method position() = game.at(4,6)
+	method text() = "" + juego.puntajes()
+	method textColor() = "766e65"
+}
+
+object pantallaMovimiento {
+	method position() = game.at(3,6)
+	method text() = "" + juego.movimientos()
+	method textColor() = "766e65"
+}
+
+object pantallaPerder {
+	method position() = game.at(0,0)
+	method image() = "assets/perdiste.png"
+}
+
+object pantallaGanar {
+	method position() = game.at(0,0)
+	method image() = "assets/ganaste.png"
 }
