@@ -4,6 +4,10 @@ import wollok.game.*
 
 describe "El tablero" {
 	
+	method initialize(){
+		game.clear()
+	}
+	
 	test "El tablero debería estar lleno cuando todos los casilleros están ocupados por un número." {
 		juego.agregarNumeroEn(2, 1, 1)
 		juego.agregarNumeroEn(2, 1, 2)
@@ -31,6 +35,10 @@ describe "El tablero" {
 }
 		
 describe "Agregar número al tablero." {
+	
+	method initialize(){
+		game.clear()
+	}
 		
 	test "Agregar un número al tablero debería ocupar ese casillero." {
 		
@@ -49,6 +57,10 @@ describe "Agregar número al tablero." {
 }
 
 describe "Mover número" {
+	
+	method initialize(){
+		game.clear()
+	}
 		
 	test "Presionar la tecla arriba debería mover un número al borde superior."{
 		juego.agregarNumeroEn(2, 2, 2)
@@ -114,6 +126,10 @@ describe "Mover número" {
 }
 
 describe "Fusionar numeros" {
+	
+	method initialize(){
+		game.clear()
+	}
 
 	test "Mover dos números que son iguales a un borde, debería fusionarlos si tienen el mismo valor." {
 		juego.agregarNumeroEn(2, 1, 4)
@@ -121,14 +137,89 @@ describe "Fusionar numeros" {
 		juego.tecla("arriba")
 		assert.that(juego.numeros().any{numero => numero.numero() == 4})
 	}
+	
+	test "Mover dos números que son diferentes a un borde, no debería fusionarlos sino dejarlos uno al lado del otro." {
+		juego.agregarNumeroEn(8, 1, 1)
+		juego.agregarNumeroEn(32, 3, 1)
+		juego.tecla("derecha")
+		assert.equals(32, juego.getNumeroEn(4, 1).numero())
+		assert.equals(8, juego.getNumeroEn(3, 1).numero())
+	}
 }
 
 describe "Ganar el juego" {
+	
+	method initialize(){
+		game.clear()
+	}
 	
 	test "El juego se gana al tener presente el número 2048 en el tablero." {
 		
 		juego.agregarNumeroEn(2048, 1, 1)
 		juego.numeros().forEach({numero => juego.chequearGanador(numero)})
 		assert.that(game.hasVisual(pantallaGanar))
+	}
+}
+
+describe "Perder el juego" {
+	
+	method initialize(){
+		game.clear()
+	}
+	
+	test "Si el tablero está lleno pero hay movimientos disponibles no debería perder el juego" {
+		
+		juego.agregarNumeroEn(2, 1, 1)
+		juego.agregarNumeroEn(2, 1, 2)
+		juego.agregarNumeroEn(2, 1, 3)
+		juego.agregarNumeroEn(2, 1, 4)
+		
+		juego.agregarNumeroEn(2, 2, 1)
+		juego.agregarNumeroEn(2, 2, 2)
+		juego.agregarNumeroEn(2, 2, 3)
+		juego.agregarNumeroEn(2, 2, 4)
+		
+		juego.agregarNumeroEn(2, 3, 1)
+		juego.agregarNumeroEn(2, 3, 2)
+		juego.agregarNumeroEn(2, 3, 3)
+		juego.agregarNumeroEn(2, 3, 4)
+		
+		juego.agregarNumeroEn(2, 4, 1)
+		juego.agregarNumeroEn(2, 4, 2)
+		juego.agregarNumeroEn(2, 4, 3)
+		juego.agregarNumeroEn(2, 4, 4)
+		
+		juego.chequearPerdedor()
+		
+		assert.that(juego.estaLleno())
+		assert.that(!game.hasVisual(pantallaPerder))
+	}
+	
+	test "Si el tablero está lleno y no hay movimientos disponibles se pierde el juego" {
+		
+		juego.agregarNumeroEn(2, 1, 1)
+		juego.agregarNumeroEn(4, 1, 2)
+		juego.agregarNumeroEn(8, 1, 3)
+		juego.agregarNumeroEn(16, 1, 4)
+		
+		juego.agregarNumeroEn(32, 2, 1)
+		juego.agregarNumeroEn(64, 2, 2)
+		juego.agregarNumeroEn(128, 2, 3)
+		juego.agregarNumeroEn(256, 2, 4)
+		
+		juego.agregarNumeroEn(512, 3, 1)
+		juego.agregarNumeroEn(1024, 3, 2)
+		juego.agregarNumeroEn(2, 3, 3)
+		juego.agregarNumeroEn(4, 3, 4)
+		
+		juego.agregarNumeroEn(8, 4, 1)
+		juego.agregarNumeroEn(16, 4, 2)
+		juego.agregarNumeroEn(32, 4, 3)
+		juego.agregarNumeroEn(64, 4, 4)
+		
+		juego.chequearPerdedor()
+		
+		assert.that(juego.estaLleno())
+		assert.that(game.hasVisual(pantallaPerder))
 	}
 }
