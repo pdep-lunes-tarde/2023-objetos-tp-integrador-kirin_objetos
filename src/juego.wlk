@@ -7,7 +7,7 @@ object juego {
 	var property terminado = false
 	const property numeros = new List()
 	var movimientos = 0
-	const coordenadas = [
+	const tablero = [
 		game.at(1,4),game.at(2,4),game.at(3,4),game.at(4,4),
 		game.at(1,3),game.at(2,3),game.at(3,3),game.at(4,3),
 		game.at(1,2),game.at(2,2),game.at(3,2),game.at(4,2),
@@ -284,6 +284,6 @@ object juego {
 		}
 	}
 	
-	method estaLleno() = coordenadas.all{coordenada=>self.estaOcupado(coordenada)}
+	method estaLleno() = tablero.all{casillero=>self.estaOcupado(casillero)}
 	
 }
