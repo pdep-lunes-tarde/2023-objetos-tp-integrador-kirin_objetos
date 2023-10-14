@@ -36,71 +36,17 @@ class Numero {
 	method image() = "assets/" + numero + ".png"
 }
 
-object tablero{
-
-	const casilleros = new Dictionary()
-	
-	method casilleros() = casilleros
-	
-	method init(){
-		
-		/*
-		
-		 a Dictionary [
-		 "1x1" -> 0, "1x2" -> 0, "1x3" -> 0, "1x4" -> 0,
-		 "2x1" -> 0, "2x2" -> 0, "2x3" -> 0, "2x4" -> 0,
-		 "3x1" -> 0, "3x2" -> 0, "3x3" -> 0, "3x4" -> 0,
-		 "4x1" -> 0, "4x2" -> 0, "4x3" -> 0, "4x4" -> 0]
-		 
-		*/
-		
-		self.addNumero(0,1,1)
-		self.addNumero(0,2,1)
-		self.addNumero(0,3,1)
-		self.addNumero(0,4,1)
-		
-		self.addNumero(0,1,2)
-		self.addNumero(0,2,2)
-		self.addNumero(0,3,2)
-		self.addNumero(0,4,2)
-		
-		self.addNumero(0,1,3)
-		self.addNumero(0,2,3)
-		self.addNumero(0,3,3)
-		self.addNumero(0,4,3)
-		
-		self.addNumero(0,1,4)
-		self.addNumero(0,2,4)
-		self.addNumero(0,3,4)
-		self.addNumero(0,4,4)
-
-	}
-	
-	method addNumero(numero,ejeX,ejeY){
-		casilleros.put(self.armarEje(ejeX,ejeY),numero)
-	}
-	
-	method armarEje(ejeX,ejeY){
-		return ejeX.toString() + "x" + ejeY.toString()
-	}
-	
-	method getNumero(ejeX,ejeY) = casilleros.get(self.armarEje(ejeX,ejeY))
-
-	method borrar(coordenada){
-		casilleros.put(coordenada,0)
-	}
-	
-	method buscar(coordenada) = casilleros.basicGet(coordenada)
-	
-	method estaLleno() = casilleros.values().all{numero => numero != 0}
-	
-}
-
 object juego {
 	
 	var property terminado = false
 	const property numeros = new List()
 	var movimientos = 0
+	const property coordenadas = [
+		game.at(1,4),game.at(2,2),game.at(3,3),game.at(4,4),
+		game.at(1,3),game.at(2,2),game.at(3,3),game.at(4,4),
+		game.at(1,2),game.at(2,2),game.at(3,3),game.at(4,4),
+		game.at(1,1),game.at(2,2),game.at(3,3),game.at(4,4)
+	]
 	var referencia
 	var puntajes = 0
 	var puntajeMasAlto = 0
@@ -133,7 +79,6 @@ object juego {
 		
 		self.terminado(false)
 		
-		tablero.init()
 			
 		self.agregarNumero()
 		self.agregarNumero()
@@ -209,10 +154,9 @@ object juego {
 	
 	method agregarNumero(){
 		
-		if(!tablero.estaLleno()){
+		if(!self.tableroLleno()){
 			referencia = new Numero(numero=2,position=self.eje_random())
 			numeros.add(referencia)
-			tablero.addNumero(referencia,referencia.positionX(),referencia.positionY())
 			game.addVisual(referencia)
 
 		}
@@ -255,9 +199,7 @@ object juego {
 	
 	        if (!self.estaOcupado(nuevoX, nuevoY)) {
 	        	
-	            tablero.borrar(tablero.armarEje(x, y))
 	            numero.position(game.at(nuevoX, nuevoY))
-	            tablero.addNumero(numero, nuevoX, nuevoY)
 	            self.moverNumero(numero, direccion)
 	            
 	        } else {
@@ -347,7 +289,6 @@ object juego {
         	numero1.numero(numero1.numero()*2)
         	puntajes += numero1.numero()
 
-        	tablero.borrar(tablero.armarEje(numero2.positionX(),numero2.positionY()))
         	game.removeVisual(numero2)
  
        		self.numeros().remove(numero2)
@@ -375,7 +316,7 @@ object juego {
 	}
 	
 	method chequearPerdedor(){
-		if(tablero.estaLleno() && !self.numeros().any({numero=>self.sePuedeMover(numero)})){
+		if(self.tableroLleno() && !self.numeros().any({numero=>self.sePuedeMover(numero)})){
 			self.terminar(pantallaPerder)
 		}
 		
@@ -386,6 +327,9 @@ object juego {
 			puntajeMasAlto = numero
 		}
 	}
+	
+	method tableroLleno() = coordenadas.all{coordenada=>self.estaOcupado(coordenada)}
+	
 }
 
 object pantallaPuntajeMasAlta {
