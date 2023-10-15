@@ -171,9 +171,7 @@ object juego {
 	method coordenada_a_posicion(x,y) = game.at(x,y)
 	
 	method estaOcupado(x,y) = game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() > 0
-	
-	method estaOcupado(posicion) = game.getObjectsIn(posicion).size() > 0
-	
+		
 	method moverNumero(numero, direccion){
 		
 	    const x = numero.x()
@@ -312,7 +310,7 @@ object juego {
 		}
 	}
 	
-	method estaLleno() = tablero.all{casillero=>self.estaOcupado(casillero)}
+	method estaLleno() = tablero.all{casillero=>self.estaOcupado(casillero.x(),casillero.y())}
 	
 }
 
