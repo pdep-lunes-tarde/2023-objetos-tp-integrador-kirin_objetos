@@ -3,16 +3,9 @@ import wollok.game.*
 class Numero {
 	var property numero
 	var property position
-	var movimientosFaltantes = 0
 	
 	method numero() = numero
-	
-	method movimientosFaltantes() = movimientosFaltantes
-	
-	method movimientosFaltantes(cantidad){
-		movimientosFaltantes += cantidad
-	}
-  	
+	  	
   	method x() = self.position().x()
 	
 	method y() = self.position().y()

@@ -1,6 +1,5 @@
-import juego.*
-
 import wollok.game.*
+import juego.*
 
 describe "El tablero" {
 	
