@@ -9,8 +9,8 @@ class Numero {
 	
 	method movimientosFaltantes() = movimientosFaltantes
 	
-	method movimientosFaltantes(nuevo_numero){
-		movimientosFaltantes += nuevo_numero
+	method movimientosFaltantes(cantidad){
+		movimientosFaltantes += cantidad
 	}
   	
   	method x() = self.position().x()
@@ -25,26 +25,23 @@ object juego {
 	var property terminado = false
 	const property numeros = new List()
 	var movimientos = 0
+	var referencia
+	var puntajes = 0
+	var puntajeMasAlto = 0
 	const tablero = [
 		game.at(1,4),game.at(2,4),game.at(3,4),game.at(4,4),
 		game.at(1,3),game.at(2,3),game.at(3,3),game.at(4,3),
 		game.at(1,2),game.at(2,2),game.at(3,2),game.at(4,2),
-		game.at(1,1),game.at(2,1),game.at(3,1),game.at(4,1)
-	]
-	var referencia
-	var puntajes = 0
-	var puntajeMasAlto = 0
+		game.at(1,1),game.at(2,1),game.at(3,1),game.at(4,1)]
 			
 	method iniciar() {	
 		self.initBasico()
 		self.hacerConfiguracionInicial()
 		self.configurarTeclas()
 		game.start()
-		 	
 	}
 	
 	method initBasico(){
-		
 		game.width(6)
 		game.height(7)
 		game.cellSize(100)
@@ -57,80 +54,61 @@ object juego {
 	}
 	
 	method hacerConfiguracionInicial() {
-
 		puntajes = 0
 		movimientos = 0
-		
 		self.terminado(false)
-			
 		self.agregarNumero()
 		self.agregarNumero()
 	}
 	
 	method tecla(direccion){
-		
-    if(!terminado){
-        var seMovio = false
-        
-        self.ordenarNumeros(direccion)
-        
-        self.numeros().forEach { num =>
-            if(self.moverNumero(num, direccion)) {
-                seMovio = true
-            }
-        }
-        
-        if(seMovio) { 
-            self.agregarNumero()
-            movimientos += 1
-            self.chequearPuntaje(puntajes)
-            self.numeros().forEach { numero => self.chequearGanador(numero) }
-            
-            if(!game.hasVisual(pantallaGanar)){
-                self.chequearPerdedor()   
-            } 
-        }
-    }
-}
+	    if(!terminado){
+	        var seMovio = false
+	        self.ordenarNumeros(direccion)
+	        self.numeros().forEach { num =>
+	            if(self.moverNumero(num, direccion)) {
+	                seMovio = true
+	            }
+	        }
+	        
+	        if(seMovio) { 
+	            self.agregarNumero()
+	            movimientos += 1
+	            self.chequearPuntaje(puntajes)
+	            self.numeros().forEach { numero => self.chequearGanador(numero) }
+	            
+	            if(!game.hasVisual(pantallaGanar)){
+	                self.chequearPerdedor()   
+	            } 
+	        }
+	    }
+	}
 
 	method configurarTeclas() {
-		
 		keyboard.up().onPressDo{ self.tecla("arriba") }
-			
 		keyboard.down().onPressDo{ self.tecla("abajo") }
-		
 		keyboard.left().onPressDo{ self.tecla("izquierda") }
-		
 		keyboard.right().onPressDo{ self.tecla("derecha") }
-		
 		keyboard.r().onPressDo{ self.reiniciar() }
-		
 	}
 			
 	method reiniciar(){
-		
 		if(game.hasVisual(pantallaPerder) or game.hasVisual(pantallaGanar)){
-		
 			self.numeros().forEach{numero =>
 				numeros.remove(numero)
 				game.removeVisual(numero)
 			}
-			
 			if(game.hasVisual(pantallaPerder)){
 				game.removeVisual(pantallaPerder)
 			}
-			
 			if(game.hasVisual(pantallaGanar)){
 				game.removeVisual(pantallaGanar)
 			}
-			
 			self.hacerConfiguracionInicial()
-		
 		}
 	}
 	
 	method ordenarNumeros(direccion) {
-		
 		if (direccion == "derecha") {
 	 		 numeros.sortBy{ num1,num2 => num1.x() > num2.x() }
 		} else if (direccion == "izquierda") {
@@ -143,7 +121,6 @@ object juego {
 	}
 	
 	method agregarNumero(){
-		
 		if(!self.estaLleno()){
 			referencia = new Numero(numero=2,position=self.eje_random())
 			numeros.add(referencia)
@@ -152,10 +129,8 @@ object juego {
 	}
 	
 	method eje_random() {
-	
 		const x = new Range(start = 1, end = 4).anyOne()
 		const y = new Range(start = 1, end = 4).anyOne()
-		
 		if(!self.estaOcupado(x,y))
 			return game.at(x,y)
 		else
@@ -167,19 +142,15 @@ object juego {
 		numeros.add(referencia)
 		game.addVisual(referencia)	
 	}
-	
-	method coordenada_a_posicion(x,y) = game.at(x,y)
-	
-	method estaOcupado(x,y) = game.getObjectsIn(self.coordenada_a_posicion(x,y)).size() > 0
+		
+	method estaOcupado(x,y) = game.getObjectsIn(game.at(x,y)).size() > 0
 		
 	method moverNumero(numero, direccion){
-		
 	    const x = numero.x()
 	    const y = numero.y()
 	    const movimientosRestantes = self.calcularCasillerosRestantes(numero, direccion)
 	
 	    if (movimientosRestantes > 0) {
-	    	
 	        const nuevoX = x + self.calcularIncrementoX(direccion)
 	        const nuevoY = y + self.calcularIncrementoY(direccion)
 	
@@ -190,12 +161,11 @@ object juego {
 	            return true
 	            
 	        } else {
-	        	
 	            const numeroEnNuevaPosicion = self.getNumeroEn(nuevoX, nuevoY)
 	            
 	            if (numero.numero() == numeroEnNuevaPosicion.numero()) {
 	            	
-	                self.fusionarNumeros(numero, numeroEnNuevaPosicion)
+	                self.sumarNumeros(numero, numeroEnNuevaPosicion)
 	                self.moverNumero(numero, direccion)
 	                return true
 	            }
@@ -254,10 +224,9 @@ object juego {
 	    if (movimientosRestantes <= 0) {
 	        return false
 	    }
-	
 	    const nuevoX = x + self.calcularIncrementoX(direccion)
 	    const nuevoY = y + self.calcularIncrementoY(direccion)
-	
+	    
 	    if (nuevoX >= 1 && nuevoX <= 4 && nuevoY >= 1 && nuevoY <= 4) {
 	        if (self.estaOcupado(nuevoX, nuevoY)) {
 	            const numeroEnNuevaPosicion = self.getNumeroEn(nuevoX, nuevoY)
@@ -266,17 +235,17 @@ object juego {
 	            return true
 	        }
 	    }
-	    return false
+	  return false
 	}
 
-	method fusionarNumeros(numero1, numero2) {
+	method sumarNumeros(numero1, numero2) {
 			
 		if (numero1.numero() == numero2.numero()) {
-	        	numero1.numero(numero1.numero()*2)
-	        	puntajes += numero1.numero()
-	        	game.removeVisual(numero2)
+	    	numero1.numero(numero1.numero()*2)
+	    	puntajes += numero1.numero()
+        	game.removeVisual(numero2)
 	       	self.numeros().remove(numero2)
-    		}  	
+		}  	
 	} 
 
 	method getNumeroEn(x, y) = game.getObjectsIn(game.at(x,y)).head()
@@ -311,7 +280,6 @@ object juego {
 	}
 	
 	method estaLleno() = tablero.all{casillero=>self.estaOcupado(casillero.x(),casillero.y())}
-	
 }
 
 object pantallaPuntajeMasAlta {
