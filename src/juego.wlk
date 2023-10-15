@@ -86,7 +86,7 @@ object juego {
 	}
 			
 	method reiniciar(){
-		if(game.hasVisual(pantallaPerder) or game.hasVisual(pantallaGanar)){
+		if(terminado){
 			self.numeros().forEach{numero =>
 				numeros.remove(numero)
 				game.removeVisual(numero)
