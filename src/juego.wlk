@@ -14,7 +14,6 @@ class Numero {
 }
 
 object juego {
-	
 	var property terminado = false
 	const property numeros = new List()
 	var movimientos = 0
@@ -275,22 +274,28 @@ object juego {
 	method estaLleno() = tablero.all{casillero=>self.estaOcupado(casillero.x(),casillero.y())}
 }
 
-object pantallaPuntajeMasAlta {
+class Texto {
+	method textColor() = "766e65"
+}
+
+
+
+object pantallaPuntajeMasAlta inherits Texto {
 	method position() = game.at(5,6)
 	method text() = "" + juego.puntajeMasAlto()
-	method textColor() = "766e65"
+//	method textColor() = "766e65"
 }
 
-object pantallaPuntaje {
+object pantallaPuntaje inherits Texto {
 	method position() = game.at(4,6)
 	method text() = "" + juego.puntajes()
-	method textColor() = "766e65"
+//	method textColor() = "766e65"
 }
 
-object pantallaMovimiento {
+object pantallaMovimiento inherits Texto {
 	method position() = game.at(3,6)
 	method text() = "" + juego.movimientos()
-	method textColor() = "766e65"
+//	method textColor() = "766e65"
 }
 
 object pantallaPerder {
