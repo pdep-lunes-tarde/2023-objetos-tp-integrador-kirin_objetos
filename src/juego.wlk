@@ -3,13 +3,8 @@ import wollok.game.*
 class Numero {
 	var property numero
 	var property position
-	
-	method numero() = numero
-	  	
   	method x() = self.position().x()
-	
 	method y() = self.position().y()
-
 	method image() = "assets/" + numero + ".png"
 }
 
@@ -278,24 +273,19 @@ class Texto {
 	method textColor() = "766e65"
 }
 
-
-
 object pantallaPuntajeMasAlta inherits Texto {
 	method position() = game.at(5,6)
 	method text() = "" + juego.puntajeMasAlto()
-//	method textColor() = "766e65"
 }
 
 object pantallaPuntaje inherits Texto {
 	method position() = game.at(4,6)
 	method text() = "" + juego.puntajes()
-//	method textColor() = "766e65"
 }
 
 object pantallaMovimiento inherits Texto {
 	method position() = game.at(3,6)
 	method text() = "" + juego.movimientos()
-//	method textColor() = "766e65"
 }
 
 object pantallaPerder {
