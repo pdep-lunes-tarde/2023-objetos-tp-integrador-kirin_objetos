@@ -36,7 +36,7 @@ object juego {
 		game.boardGround("assets/fondo.png")
 		game.addVisual(pantallaPuntaje)
 		game.addVisual(pantallaMovimiento)
-		game.addVisual(pantallaPuntajeMasAlta)
+		game.addVisual(pantallaPuntajeMasAlto)
 		
 	}
 	
@@ -273,7 +273,7 @@ class Color {
 	method textColor() = "766e65"
 }
 
-object pantallaPuntajeMasAlta inherits Color {
+object pantallaPuntajeMasAlto inherits Color {
 	method position() = game.at(5,6)
 	method text() = "" + juego.puntajeMasAlto()
 }
