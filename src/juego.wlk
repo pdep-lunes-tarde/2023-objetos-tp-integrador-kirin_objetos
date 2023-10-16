@@ -24,14 +24,28 @@ object juego {
 		game.at(1,3),game.at(2,3),game.at(3,3),game.at(4,3),
 		game.at(1,2),game.at(2,2),game.at(3,2),game.at(4,2),
 		game.at(1,1),game.at(2,1),game.at(3,1),game.at(4,1)]
-		
-
 			
 	method iniciar() {	
 		self.configuracionBasica()
 		self.configuracionInicial()
 		self.configurarTeclas()
 		game.start()
+	}
+	
+	method reiniciar(){
+		if(terminado){
+			self.numeros().forEach{numero =>
+				numeros.remove(numero)
+				game.removeVisual(numero)
+			}
+			if(game.hasVisual(pantallaPerder)){
+				game.removeVisual(pantallaPerder)
+			}
+			if(game.hasVisual(pantallaGanar)){
+				game.removeVisual(pantallaGanar)
+			}
+			self.configuracionInicial()
+		}
 	}
 	
 	method configuracionBasica(){
@@ -58,7 +72,7 @@ object juego {
 	    if(!terminado){
 	        var seMovio = false
 	        self.ordenarNumeros(direccion)
-	        self.numeros().forEach { num =>
+	        self.numeros().forEach{ num =>
 	            if(self.moverNumero(num, direccion)) {
 	                seMovio = true
 	            }
@@ -85,22 +99,6 @@ object juego {
 		keyboard.r().onPressDo{ self.reiniciar() }
 	}
 			
-	method reiniciar(){
-		if(terminado){
-			self.numeros().forEach{numero =>
-				numeros.remove(numero)
-				game.removeVisual(numero)
-			}
-			if(game.hasVisual(pantallaPerder)){
-				game.removeVisual(pantallaPerder)
-			}
-			if(game.hasVisual(pantallaGanar)){
-				game.removeVisual(pantallaGanar)
-			}
-			self.configuracionInicial()
-		}
-	}
-	
 	method ordenarNumeros(direccion) {
 		if (direccion == "derecha") {
 	 		numeros.sortBy{ num1,num2 => num1.x() > num2.x() }
@@ -111,11 +109,11 @@ object juego {
 		} else if (direccion == "arriba") {
 			numeros.sortBy{ num1,num2 => num1.y() > num2.y() }
 		}
-	}	
+	}
 	
 	method agregarNumero(){
 		if(!self.estaLleno()){
-			const nuevoEje = self.eje_random()
+			const nuevoEje = self.ejeRandom()
 			self.agregarNumeroEn(2,nuevoEje.x(),nuevoEje.y())
 		}
 	}
@@ -126,14 +124,13 @@ object juego {
 		game.addVisual(referencia)	
 	}
 	
-	
-	method eje_random() {
+	method ejeRandom() {
 		const x = new Range(start = 1, end = 4).anyOne()
 		const y = new Range(start = 1, end = 4).anyOne()
 		if(!self.estaOcupado(x,y))
 			return game.at(x,y)
 		else
-			return self.eje_random()	
+			return self.ejeRandom()	
 	}
 		
 	method estaOcupado(x,y) = game.getObjectsIn(game.at(x,y)).size() > 0
@@ -266,9 +263,9 @@ object juego {
 		}
 	}
 	
-	method chequearPuntaje(numero) {
-		if(numero >= puntajeMasAlto){
-			puntajeMasAlto = numero
+	method chequearPuntaje(puntaje) {
+		if(puntaje >= puntajeMasAlto){
+			puntajeMasAlto = puntaje
 		}
 	}
 	
