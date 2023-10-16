@@ -10,16 +10,22 @@ class Numero {
 
 object juego {
 	var property terminado = false
-	const property numeros = new List()
 	var movimientos = 0
 	var referencia
 	var puntajes = 0
 	var puntajeMasAlto = 0
+	const property numeros = new List()
+	const limiteDerecho = 4
+	const limiteSuperior = limiteDerecho
+	const limiteIzquierdo = 1
+	const limiteInferior = limiteIzquierdo
 	const tablero = [
 		game.at(1,4),game.at(2,4),game.at(3,4),game.at(4,4),
 		game.at(1,3),game.at(2,3),game.at(3,3),game.at(4,3),
 		game.at(1,2),game.at(2,2),game.at(3,2),game.at(4,2),
 		game.at(1,1),game.at(2,1),game.at(3,1),game.at(4,1)]
+		
+
 			
 	method iniciar() {	
 		self.configuracionBasica()
@@ -97,7 +103,7 @@ object juego {
 	
 	method ordenarNumeros(direccion) {
 		if (direccion == "derecha") {
-	 		 numeros.sortBy{ num1,num2 => num1.x() > num2.x() }
+	 		numeros.sortBy{ num1,num2 => num1.x() > num2.x() }
 		} else if (direccion == "izquierda") {
 			numeros.sortBy{ num1,num2 => num1.x() < num2.x() }
 		} else if (direccion == "abajo") {
@@ -105,7 +111,7 @@ object juego {
 		} else if (direccion == "arriba") {
 			numeros.sortBy{ num1,num2 => num1.y() > num2.y() }
 		}
-	}
+	}	
 	
 	method agregarNumero(){
 		if(!self.estaLleno()){
@@ -166,13 +172,13 @@ object juego {
 	    const y = numero.y()
 	    
 	    if (direccion == "derecha") {
-	        return 4 - x
+	        return limiteDerecho - x
 	    } else if (direccion == "izquierda") {
-	        return x - 1
+	        return x - limiteIzquierdo
 	    } else if (direccion == "arriba") {
-	        return 4 - y
+	        return limiteSuperior - y
 	    } else {
-	        return y - 1
+	        return y - limiteInferior
 	    }
 	}
 
@@ -208,13 +214,13 @@ object juego {
 	    const y = numero.y()
 	    const movimientosRestantes = self.calcularCasillerosRestantes(numero, direccion)
 	
-	    if (movimientosRestantes <= 0) {
+	    if (movimientosRestantes == 0) {
 	        return false
 	    }
 	    const nuevoX = x + self.calcularIncrementoX(direccion)
 	    const nuevoY = y + self.calcularIncrementoY(direccion)
 	    
-	    if (nuevoX >= 1 && nuevoX <= 4 && nuevoY >= 1 && nuevoY <= 4) {
+	    if (nuevoX >= limiteIzquierdo and nuevoX <= limiteDerecho and nuevoY >= limiteInferior and nuevoY <= limiteSuperior) {
 	        if (self.estaOcupado(nuevoX, nuevoY)) {
 	            const numeroEnNuevaPosicion = self.getNumeroEn(nuevoX, nuevoY)
 	            return numero.numero() == numeroEnNuevaPosicion.numero()
@@ -244,8 +250,8 @@ object juego {
 	method movimientos() = movimientos	
 	
 	method terminar(visual){
-		game.addVisual(visual)	
 		terminado = true
+		game.addVisual(visual)	
 	}
 	
 	method chequearGanador(numero){
@@ -255,7 +261,7 @@ object juego {
 	}
 	
 	method chequearPerdedor(){
-		if(self.estaLleno() && !self.numeros().any({numero=>self.sePuedeMover(numero)})){
+		if(self.estaLleno() and !self.numeros().any({numero=>self.sePuedeMover(numero)})){
 			self.terminar(pantallaPerder)
 		}
 	}
