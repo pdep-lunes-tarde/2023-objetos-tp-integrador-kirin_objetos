@@ -109,11 +109,17 @@ object juego {
 	
 	method agregarNumero(){
 		if(!self.estaLleno()){
-			referencia = new Numero(numero=2,position=self.eje_random())
-			numeros.add(referencia)
-			game.addVisual(referencia)
+			const nuevoEje = self.eje_random()
+			self.agregarNumeroEn(2,nuevoEje.x(),nuevoEje.y())
 		}
 	}
+	
+	method agregarNumeroEn(cual,x,y){	
+		referencia = new Numero(numero=cual,position=game.at(x,y))
+		numeros.add(referencia)
+		game.addVisual(referencia)	
+	}
+	
 	
 	method eje_random() {
 		const x = new Range(start = 1, end = 4).anyOne()
@@ -122,12 +128,6 @@ object juego {
 			return game.at(x,y)
 		else
 			return self.eje_random()	
-	}
-	
-	method agregarNumeroEn(cual,x,y){	
-		referencia = new Numero(numero=cual,position=game.at(x,y))
-		numeros.add(referencia)
-		game.addVisual(referencia)	
 	}
 		
 	method estaOcupado(x,y) = game.getObjectsIn(game.at(x,y)).size() > 0
