@@ -269,23 +269,22 @@ object juego {
 	method estaLleno() = tablero.all{casillero=>self.estaOcupado(casillero.x(),casillero.y())}
 }
 
-class Color {
+object pantallaPuntajeMasAlto{
+	method position() = game.at(5,6)
+	method text() = juego.puntajeMasAlto().toString()
 	method textColor() = "766e65"
 }
 
-object pantallaPuntajeMasAlto inherits Color {
-	method position() = game.at(5,6)
-	method text() = "" + juego.puntajeMasAlto()
-}
-
-object pantallaPuntaje inherits Color {
+object pantallaPuntaje{
 	method position() = game.at(4,6)
-	method text() = "" + juego.puntajes()
+	method text() = juego.puntajes().toString()
+	method textColor() = "766e65"
 }
 
-object pantallaMovimiento inherits Color {
+object pantallaMovimiento{
 	method position() = game.at(3,6)
-	method text() = "" + juego.movimientos()
+	method text() = juego.movimientos().toString()
+	method textColor() = "766e65"
 }
 
 object pantallaPerder {
