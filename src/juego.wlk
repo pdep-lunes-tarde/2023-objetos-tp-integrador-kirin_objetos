@@ -22,17 +22,17 @@ object juego {
 		game.at(1,1),game.at(2,1),game.at(3,1),game.at(4,1)]
 			
 	method iniciar() {	
-		self.initBasico()
-		self.hacerConfiguracionInicial()
+		self.configuracionBasica()
+		self.configuracionInicial()
 		self.configurarTeclas()
 		game.start()
 	}
 	
-	method initBasico(){
+	method configuracionBasica(){
 		game.width(6)
 		game.height(7)
 		game.cellSize(100)
-		game.title("2048")
+		game.title("2048 - Paradigmas de Programación UTN FRBA")
 		game.boardGround("assets/fondo.png")
 		game.addVisual(pantallaPuntaje)
 		game.addVisual(pantallaMovimiento)
@@ -40,7 +40,7 @@ object juego {
 		
 	}
 	
-	method hacerConfiguracionInicial() {
+	method configuracionInicial() {
 		puntajes = 0
 		movimientos = 0
 		self.terminado(false)
@@ -91,7 +91,7 @@ object juego {
 			if(game.hasVisual(pantallaGanar)){
 				game.removeVisual(pantallaGanar)
 			}
-			self.hacerConfiguracionInicial()
+			self.configuracionInicial()
 		}
 	}
 	
