@@ -63,25 +63,25 @@ describe "Mover número" {
 		
 	test "Presionar la tecla arriba debería mover un número al borde superior."{
 		juego.agregarNumeroEn(2, 2, 2)
-		juego.tecla(arriba)
+		juego.estado().tecla(arriba)
 		
 		assert.that(juego.estaOcupado(2, 4))
 	}
 	test "Presionar la tecla abajo debería mover un número al borde inferior."{
 		juego.agregarNumeroEn(2, 2, 2)
-		juego.tecla(abajo)
+		juego.estado().tecla(abajo)
 		
 		assert.that(juego.estaOcupado(2, 1))
 	}
 	test "Presionar la tecla izquierda debería mover un número al borde izquierdo."{
 		juego.agregarNumeroEn(2, 2, 2)
-		juego.tecla(izquierda)
+		juego.estado().tecla(izquierda)
 		
 		assert.that(juego.estaOcupado(1, 2))
 	}
 	test "Presionar la tecla derecha debería mover un número al borde derecho."{
 		juego.agregarNumeroEn(2, 2, 2)
-		juego.tecla(derecha)
+		juego.estado().tecla(derecha)
 		
 		assert.that(juego.estaOcupado(4, 2))
 	}
@@ -89,7 +89,7 @@ describe "Mover número" {
 	test "Presionar la tecla arriba debería mover todos los números al borde superior."{
 		juego.agregarNumeroEn(2, 2, 2)
 		juego.agregarNumeroEn(2, 3, 3)
-		juego.tecla(arriba)
+		juego.estado().tecla(arriba)
 		
 		assert.that(juego.estaOcupado(2, 4))
 		assert.that(juego.estaOcupado(3, 4))
@@ -98,7 +98,7 @@ describe "Mover número" {
 	test "Presionar la tecla abajo debería mover todos los números al borde inferior."{
 		juego.agregarNumeroEn(2, 2, 2)
 		juego.agregarNumeroEn(2, 3, 3)
-		juego.tecla(abajo)
+		juego.estado().tecla(abajo)
 		
 		assert.that(juego.estaOcupado(2, 1))
 		assert.that(juego.estaOcupado(3, 1))
@@ -107,7 +107,7 @@ describe "Mover número" {
 	test "Presionar la tecla izquierda debería mover todos los números al borde izquierdo."{	
 		juego.agregarNumeroEn(2, 2, 2)
 		juego.agregarNumeroEn(2, 3, 3)
-		juego.tecla(izquierda)
+		juego.estado().tecla(izquierda)
 		
 		assert.that(juego.estaOcupado(1, 2))
 		assert.that(juego.estaOcupado(1, 3))
@@ -116,7 +116,7 @@ describe "Mover número" {
 	test "Presionar la tecla derecha debería mover todos los números al borde derecho."{		
 		juego.agregarNumeroEn(2, 2, 2)
 		juego.agregarNumeroEn(2, 3, 3)
-		juego.tecla(derecha)
+		juego.estado().tecla(derecha)
 		
 		assert.that(juego.estaOcupado(4, 2))
 		assert.that(juego.estaOcupado(4, 3))
@@ -133,14 +133,14 @@ describe "Fusionar numeros" {
 	test "Mover dos números que son iguales a un borde, debería fusionarlos si tienen el mismo valor." {
 		juego.agregarNumeroEn(2, 1, 4)
 		juego.agregarNumeroEn(2, 1, 3)
-		juego.tecla(arriba)
+		juego.estado().tecla(arriba)
 		assert.that(juego.numeros().any{numero => numero.numero() == 4})
 	}
 	
 	test "Mover dos números que son diferentes a un borde, no debería fusionarlos sino dejarlos uno al lado del otro." {
 		juego.agregarNumeroEn(8, 1, 1)
 		juego.agregarNumeroEn(32, 3, 1)
-		juego.tecla(derecha)
+		juego.estado().tecla(derecha)
 		assert.equals(32, juego.getNumeroEn(4, 1).numero())
 		assert.equals(8, juego.getNumeroEn(3, 1).numero())
 	}

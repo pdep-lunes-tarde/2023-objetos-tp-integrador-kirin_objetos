@@ -11,11 +11,55 @@ class Numero {
 	}
 }
 
+object finalizar{
+	
+	method reiniciar(){
+		juego.numeros().forEach{numero =>
+			juego.numeros().remove(numero)
+			game.removeVisual(numero)
+		}
+		if(game.hasVisual(pantallaPerder)){
+			game.removeVisual(pantallaPerder)
+		}
+		if(game.hasVisual(pantallaGanar)){
+			game.removeVisual(pantallaGanar)
+		}
+		juego.configuracionInicial()
+	}
+	
+	method tecla(){}
+}
+
+object enCurso{
+	method reiniciar(){}
+	method tecla(direccion){
+	        var seMovio = false
+			direccion.ordenarNumeros(juego.numeros())
+	        juego.numeros().forEach{ num =>
+	            if(juego.moverNumero(num, direccion)) {
+	                seMovio = true
+            	}
+        	}
+	        
+	        if(seMovio) { 
+	            juego.agregarNumero()
+	            juego.movimientos(juego.movimientos()+1)
+	            juego.chequearPuntaje(juego.puntajes())
+	            juego.numeros().forEach { numero => juego.chequearGanador(numero) }
+	            
+	            if(!game.hasVisual(pantallaGanar)){
+	                juego.chequearPerdedor()   
+            } 
+        }	
+	}
+	
+}
+
 object juego {
-	var property terminado = false
-	var movimientos = 0
+	var property estado = enCurso
+	var property movimientos = 0
 	var referencia
-	var puntajes = 0
+	var property puntajes = 0
 	var puntajeMasAlto = 0
 	const property numeros = new List()
 	const tablero = [
@@ -23,28 +67,13 @@ object juego {
 		game.at(1,3),game.at(2,3),game.at(3,3),game.at(4,3),
 		game.at(1,2),game.at(2,2),game.at(3,2),game.at(4,2),
 		game.at(1,1),game.at(2,1),game.at(3,1),game.at(4,1)]
+	const direcciones = [derecha,izquierda,arriba,abajo]
 			
 	method iniciar() {	
 		self.configuracionBasica()
 		self.configuracionInicial()
 		self.configurarTeclas()
 		game.start()
-	}
-	
-	method reiniciar(){
-		if(terminado){
-			self.numeros().forEach{numero =>
-				numeros.remove(numero)
-				game.removeVisual(numero)
-			}
-			if(game.hasVisual(pantallaPerder)){
-				game.removeVisual(pantallaPerder)
-			}
-			if(game.hasVisual(pantallaGanar)){
-				game.removeVisual(pantallaGanar)
-			}
-			self.configuracionInicial()
-		}
 	}
 	
 	method configuracionBasica(){
@@ -62,40 +91,17 @@ object juego {
 	method configuracionInicial() {
 		puntajes = 0
 		movimientos = 0
-		self.terminado(false)
+		estado = enCurso
 		self.agregarNumero()
 		self.agregarNumero()
 	}
 	
-	method tecla(direccion){
-	    if(!terminado){
-	        var seMovio = false
-			direccion.ordenarNumeros(numeros)
-	        self.numeros().forEach{ num =>
-	            if(self.moverNumero(num, direccion)) {
-	                seMovio = true
-	            }
-	        }
-	        
-	        if(seMovio) { 
-	            self.agregarNumero()
-	            movimientos += 1
-	            self.chequearPuntaje(puntajes)
-	            self.numeros().forEach { numero => self.chequearGanador(numero) }
-	            
-	            if(!game.hasVisual(pantallaGanar)){
-	                self.chequearPerdedor()   
-	            } 
-	        }
-	    }
-	}
-
 	method configurarTeclas() {
-		keyboard.up().onPressDo{ self.tecla(arriba) }
-		keyboard.down().onPressDo{ self.tecla(abajo) }
-		keyboard.left().onPressDo{ self.tecla(izquierda) }
-		keyboard.right().onPressDo{ self.tecla(derecha) }
-		keyboard.r().onPressDo{ self.reiniciar() }
+		keyboard.up().onPressDo{ estado.tecla(arriba) }
+		keyboard.down().onPressDo{ estado.tecla(abajo) }
+		keyboard.left().onPressDo{ estado.tecla(izquierda) }
+		keyboard.right().onPressDo{ estado.tecla(derecha) }
+		keyboard.r().onPressDo{ estado.reiniciar() }
 	}
 	
 	method agregarNumero(){
@@ -152,12 +158,7 @@ object juego {
 		return false
 	}
 
-	method sePuedeMover(numero){
-    	return 	self.movimientoValido(numero, derecha) or
-    			self.movimientoValido(numero, izquierda) or
-    			self.movimientoValido(numero, abajo) or
-    			self.movimientoValido(numero, arriba)
-	}
+	method sePuedeMover(numero) = direcciones.any{direccion=> self.movimientoValido(numero,direccion)}
 
 	method movimientoValido(numero, direccion) {
 	    const x = numero.x()
@@ -197,7 +198,7 @@ object juego {
 	method movimientos() = movimientos	
 	
 	method terminar(visual){
-		terminado = true
+		self.estado(finalizar)
 		game.addVisual(visual)	
 	}
 	
@@ -330,5 +331,3 @@ object arriba inherits Direccion {
 		numeros.sortBy{ num1,num2 => num1.y() > num2.y() }
 	}
 }
-
-		
