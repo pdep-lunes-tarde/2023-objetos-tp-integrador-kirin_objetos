@@ -28,7 +28,7 @@ En el marco de la asignatura Paradigmas de Programación, a cargo de:
 ## Stack
 - Lenguaje orientado a objetos [Wollok](https://www.wollok.org/).
 
-## Capturas de pantalla:
+## Capturas:
 <div align="center">
   <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/a277b37c-7d51-40c5-a7f4-6ada5c459572" style="width: 45%;">
   <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/05a6736d-6440-4134-b8f1-bd49e763e5e6" style="width: 45%;">
