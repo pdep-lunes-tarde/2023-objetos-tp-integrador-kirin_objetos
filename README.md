@@ -1,44 +1,44 @@
-# Grupo Kirin
-Juego 2048
-## Integrantes
+
+<div id="header" align="center">
+  <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/d0cb603c-3ae3-4c54-9fce-4c52299bd3ae" alt="Logo del 2048">
+</div>
+
+## Historia del juego:
+2048 es un juego de lógica creado por Gabriele Cirulli en 2014. Inspirado en otros juegos similares, se ha convertido en un clásico de los juegos de rompecabezas numéricos. Su simplicidad y adicción lo han hecho popular en todo el mundo. El desarrollo original lo pueden encontrar en [este repositorio](https://github.com/gabrielecirulli/2048)
+
+## Instrucciones
+El objetivo del juego es deslizar las fichas numeradas por la cuadrícula, combinando las que tienen el mismo número para obtener una nueva ficha con el valor sumado.
+Usa las teclas de dirección (arriba, abajo, izquierda, derecha) para mover todas las fichas en esa dirección y consigue la ficha con el valor 2048 para ganar.
+
+### Equipo
+Este proyecto fue desarrollado por:
 - Francisco Ou Su
 - Zoe Yusti
-- Kenzo Grosvald
+- Kenzo G.
 
-# Consigna TP Integrador
+### Docentes
+En el marco de la asignatura Paradigmas de Programación, a cargo de:
+- Juan Manuel Fernandes dos Santos
+- Dante Ariel Ortiz
+- Tomás Antonio
+- Emiliano Salvano
+- Juan Ignacio Schuhmann
+- Manuel Torrente
 
-Hacer un juego aplicando los conceptos de la materia. El tp tiene una parte práctica, que es programar el juego en sí, y una parte teórica, que es justificar decisiones que hayan tomado y mencionar para resolver qué problemas utilizaron los conceptos de la materia.
-El TP debe:
-- aplicar los conceptos que vemos durante la materia.
-- tener tests para las funcionalidades que definan.
-- evitar la repetición de lógica.
+### Stack
+- Lenguaje orientado a objetos [Wollok](https://www.wollok.org/).
 
-# Como correrlo
+### Capturas de pantalla:
+<div align="center">
+  <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/a277b37c-7d51-40c5-a7f4-6ada5c459572" style="width: 45%;">
+  <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/05a6736d-6440-4134-b8f1-bd49e763e5e6" style="width: 45%;">
+</div>
 
-Boton derecho sobre `juego.wpgm > Run as > Wollok Program`.
+## Licencia y uso
+Con el fin de promover el conocimiento y colaborar con las próximas generaciones de estudiantes, elegimos optar por hacer público el repositorio. ¡Que la fuerza y el café los acompañe, joven padawans!
 
-# Entregas
-
-Van a haber varios checkpoints presenciales en los cuales vamos a ver el estado del tp, dar correcciones y junto con ustedes decidir en qué continuar trabajando.
-Los checkpoints presenciales están en la página: https://www.pdep.com.ar/cursos/lunes-tarde
-
-# Parte teórica
-
-Les vamos a ir dando preguntas para cada checkpoint que **tienen que** dejar contestadas por escrito. Pueden directamente editar este README.md con sus respuestas:
-
---------------------
-
-## Checkpoint 1: 25/9
-
-a) Detectar un conjunto de objetos que sean polimórficos entre sí, aclarando cuál es la interfaz según la cuál son polimórficos, y _quién_ los trata de manera polimórfica.
-
-El conjunto de objetos que son polimorficos entre si en este caso serían los numeros, quien los trata de manera polimorfica tendría que ser el handler del juego, que sería en este caso el objeto de juego que maneja la ejecución del programa.
-
-b) Tomar alguna clase definida en su programa y justificar por qué es una clase y no se definió con `object`.
-
-La clase definida de Numero fue definida como tal ya que es un molde que se usa para instanciar nuevos numeros que se generan en tiempo de ejecución y comparten la misma inerfaz, cada numero tiene atributos distintos en cuanto a sus coordenadas por lo tanto no podría estar definido como un objeto ya que su estado interno no podría ser compartido. Se requieren de muchos numeros en simultaneo que van a ser repetidos y cada uno se encuentra en una coordenada distinta, habiendo sido instanciado bajo un numero distinto.
-
-c) De haber algún objeto definido con `object`, justificar por qué.
-
-El handler del juego es un objeto, ya que su tarea es mantener (a futuro supongo) un estado interno de todas las coordenadas ocupadas en algun lado (Diccionario, Lista, etc) y poder ser consultable por objetos externos al momento de verificar si la coordenada se encuentra ocupada y por quien, para poder tomar decisiones acorde. Sirve a modo de una base de datos de lo que está pasando en el programa en tiempo de ejecución.
-
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos">2048</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/pdep-lunes-tarde">Grupo Kirin</a> is licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Attribution-NonCommercial-NoDerivatives 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nd.svg?ref=chooser-v1"></a></p>
+<hr>
+<div id="footer" align="center">
+  <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/52f07558-acba-4e9c-b732-13ec90f804e0" style="width:250px; height:auto;">
+</div>
