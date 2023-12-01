@@ -3,7 +3,7 @@
   <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/c2c957e8-08cc-456a-b0b8-32644eaeca44" style="width:300px;">
 </div>
 
-## Historia del juego
+## Sobre el desarollo original
 2048 es un juego de lógica creado por Gabriele Cirulli en 2014. Inspirado en otros juegos similares, se ha convertido en un clásico de los juegos de rompecabezas numéricos. Su simplicidad y adicción lo han hecho popular en todo el mundo. El desarrollo original lo pueden encontrar en [este repositorio](https://github.com/gabrielecirulli/2048)
 
 ## Instrucciones
