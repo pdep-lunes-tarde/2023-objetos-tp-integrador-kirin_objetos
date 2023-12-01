@@ -10,13 +10,13 @@
 El objetivo del juego es deslizar las fichas numeradas por la cuadrícula, combinando las que tienen el mismo número para obtener una nueva ficha con el valor sumado.
 Usa las teclas de dirección (arriba, abajo, izquierda, derecha) para mover todas las fichas en esa dirección y consigue la ficha con el valor 2048 para ganar.
 
-### Equipo
+## Equipo
 Este proyecto fue desarrollado por:
 - Francisco Ou Su
 - Zoe Yusti
 - Kenzo G.
 
-### Docentes
+## Docentes
 En el marco de la asignatura Paradigmas de Programación, a cargo de:
 - Juan Manuel Fernandes dos Santos
 - Dante Ariel Ortiz
@@ -25,10 +25,10 @@ En el marco de la asignatura Paradigmas de Programación, a cargo de:
 - Juan Ignacio Schuhmann
 - Manuel Torrente
 
-### Stack
+## Stack
 - Lenguaje orientado a objetos [Wollok](https://www.wollok.org/).
 
-### Capturas de pantalla:
+## Capturas de pantalla:
 <div align="center">
   <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/a277b37c-7d51-40c5-a7f4-6ada5c459572" style="width: 45%;">
   <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/05a6736d-6440-4134-b8f1-bd49e763e5e6" style="width: 45%;">
