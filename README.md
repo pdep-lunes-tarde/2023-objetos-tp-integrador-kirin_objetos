@@ -1,6 +1,6 @@
 
 <div id="header" align="center">
-  <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/d0cb603c-3ae3-4c54-9fce-4c52299bd3ae" alt="Logo del 2048">
+  <img src="https://github.com/pdep-lunes-tarde/2023-objetos-tp-integrador-kirin_objetos/assets/94919997/c2c957e8-08cc-456a-b0b8-32644eaeca44" style="width:300px;">
 </div>
 
 ## Historia del juego
