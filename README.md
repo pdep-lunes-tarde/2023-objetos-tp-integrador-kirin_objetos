@@ -4,7 +4,7 @@
 </div>
 
 ## Sobre el desarollo original
-2048 es un juego de lógica creado por Gabriele Cirulli en 2014. Inspirado en otros juegos similares, se ha convertido en un clásico de los juegos de rompecabezas numéricos. Su simplicidad y adicción lo han hecho popular en todo el mundo. El juego original lo pueden encontrar en [este repositorio](https://github.com/gabrielecirulli/2048)
+2048 es un juego de lógica creado por Gabriele Cirulli en 2014. Inspirado en otros juegos similares, se ha convertido en un clásico de los juegos de rompecabezas numéricos. Su simplicidad y adicción lo han hecho popular en todo el mundo. El juego original lo pueden encontrar en [este repositorio](https://github.com/gabrielecirulli/2048).
 
 ## Instrucciones
 El objetivo del juego es deslizar las fichas numeradas por la cuadrícula, combinando las que tienen el mismo número para obtener una nueva ficha con el valor sumado.
